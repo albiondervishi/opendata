@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+
+<title>Trafi open data analysis</title>
+
+<!-- Styles for R syntax highlighter -->
+<style type="text/css">
+   pre .operator,
+   pre .paren {
+     color: rgb(104, 118, 135)
+   }
+
+   pre .literal {
+     color: #990073
+   }
+
+   pre .number {
+     color: #099;
+   }
+
+   pre .comment {
+     color: #998;
+     font-style: italic
+   }
+
+   pre .keyword {
+     color: #900;
+     font-weight: bold
+   }
+
+   pre .identifier {
+     color: rgb(0, 0, 0);
+   }
+
+   pre .string {
+     color: #d14;
+   }
+</style>
+
+<!-- R syntax highlighter -->
+<script type="text/javascript">
+var hljs=new function(){function m(p){return p.replace(/&/gm,"&amp;").replace(/</gm,"&lt;")}function f(r,q,p){return RegExp(q,"m"+(r.cI?"i":"")+(p?"g":""))}function b(r){for(var p=0;p<r.childNodes.length;p++){var q=r.childNodes[p];if(q.nodeName=="CODE"){return q}if(!(q.nodeType==3&&q.nodeValue.match(/\s+/))){break}}}function h(t,s){var p="";for(var r=0;r<t.childNodes.length;r++){if(t.childNodes[r].nodeType==3){var q=t.childNodes[r].nodeValue;if(s){q=q.replace(/\n/g,"")}p+=q}else{if(t.childNodes[r].nodeName=="BR"){p+="\n"}else{p+=h(t.childNodes[r])}}}if(/MSIE [678]/.test(navigator.userAgent)){p=p.replace(/\r/g,"\n")}return p}function a(s){var r=s.className.split(/\s+/);r=r.concat(s.parentNode.className.split(/\s+/));for(var q=0;q<r.length;q++){var p=r[q].replace(/^language-/,"");if(e[p]){return p}}}function c(q){var p=[];(function(s,t){for(var r=0;r<s.childNodes.length;r++){if(s.childNodes[r].nodeType==3){t+=s.childNodes[r].nodeValue.length}else{if(s.childNodes[r].nodeName=="BR"){t+=1}else{if(s.childNodes[r].nodeType==1){p.push({event:"start",offset:t,node:s.childNodes[r]});t=arguments.callee(s.childNodes[r],t);p.push({event:"stop",offset:t,node:s.childNodes[r]})}}}}return t})(q,0);return p}function k(y,w,x){var q=0;var z="";var s=[];function u(){if(y.length&&w.length){if(y[0].offset!=w[0].offset){return(y[0].offset<w[0].offset)?y:w}else{return w[0].event=="start"?y:w}}else{return y.length?y:w}}function t(D){var A="<"+D.nodeName.toLowerCase();for(var B=0;B<D.attributes.length;B++){var C=D.attributes[B];A+=" "+C.nodeName.toLowerCase();if(C.value!==undefined&&C.value!==false&&C.value!==null){A+='="'+m(C.value)+'"'}}return A+">"}while(y.length||w.length){var v=u().splice(0,1)[0];z+=m(x.substr(q,v.offset-q));q=v.offset;if(v.event=="start"){z+=t(v.node);s.push(v.node)}else{if(v.event=="stop"){var p,r=s.length;do{r--;p=s[r];z+=("</"+p.nodeName.toLowerCase()+">")}while(p!=v.node);s.splice(r,1);while(r<s.length){z+=t(s[r]);r++}}}}return z+m(x.substr(q))}function j(){function q(x,y,v){if(x.compiled){return}var u;var s=[];if(x.k){x.lR=f(y,x.l||hljs.IR,true);for(var w in x.k){if(!x.k.hasOwnProperty(w)){continue}if(x.k[w] instanceof Object){u=x.k[w]}else{u=x.k;w="keyword"}for(var r in u){if(!u.hasOwnProperty(r)){continue}x.k[r]=[w,u[r]];s.push(r)}}}if(!v){if(x.bWK){x.b="\\b("+s.join("|")+")\\s"}x.bR=f(y,x.b?x.b:"\\B|\\b");if(!x.e&&!x.eW){x.e="\\B|\\b"}if(x.e){x.eR=f(y,x.e)}}if(x.i){x.iR=f(y,x.i)}if(x.r===undefined){x.r=1}if(!x.c){x.c=[]}x.compiled=true;for(var t=0;t<x.c.length;t++){if(x.c[t]=="self"){x.c[t]=x}q(x.c[t],y,false)}if(x.starts){q(x.starts,y,false)}}for(var p in e){if(!e.hasOwnProperty(p)){continue}q(e[p].dM,e[p],true)}}function d(B,C){if(!j.called){j();j.called=true}function q(r,M){for(var L=0;L<M.c.length;L++){if((M.c[L].bR.exec(r)||[null])[0]==r){return M.c[L]}}}function v(L,r){if(D[L].e&&D[L].eR.test(r)){return 1}if(D[L].eW){var M=v(L-1,r);return M?M+1:0}return 0}function w(r,L){return L.i&&L.iR.test(r)}function K(N,O){var M=[];for(var L=0;L<N.c.length;L++){M.push(N.c[L].b)}var r=D.length-1;do{if(D[r].e){M.push(D[r].e)}r--}while(D[r+1].eW);if(N.i){M.push(N.i)}return f(O,M.join("|"),true)}function p(M,L){var N=D[D.length-1];if(!N.t){N.t=K(N,E)}N.t.lastIndex=L;var r=N.t.exec(M);return r?[M.substr(L,r.index-L),r[0],false]:[M.substr(L),"",true]}function z(N,r){var L=E.cI?r[0].toLowerCase():r[0];var M=N.k[L];if(M&&M instanceof Array){return M}return false}function F(L,P){L=m(L);if(!P.k){return L}var r="";var O=0;P.lR.lastIndex=0;var M=P.lR.exec(L);while(M){r+=L.substr(O,M.index-O);var N=z(P,M);if(N){x+=N[1];r+='<span class="'+N[0]+'">'+M[0]+"</span>"}else{r+=M[0]}O=P.lR.lastIndex;M=P.lR.exec(L)}return r+L.substr(O,L.length-O)}function J(L,M){if(M.sL&&e[M.sL]){var r=d(M.sL,L);x+=r.keyword_count;return r.value}else{return F(L,M)}}function I(M,r){var L=M.cN?'<span class="'+M.cN+'">':"";if(M.rB){y+=L;M.buffer=""}else{if(M.eB){y+=m(r)+L;M.buffer=""}else{y+=L;M.buffer=r}}D.push(M);A+=M.r}function G(N,M,Q){var R=D[D.length-1];if(Q){y+=J(R.buffer+N,R);return false}var P=q(M,R);if(P){y+=J(R.buffer+N,R);I(P,M);return P.rB}var L=v(D.length-1,M);if(L){var O=R.cN?"</span>":"";if(R.rE){y+=J(R.buffer+N,R)+O}else{if(R.eE){y+=J(R.buffer+N,R)+O+m(M)}else{y+=J(R.buffer+N+M,R)+O}}while(L>1){O=D[D.length-2].cN?"</span>":"";y+=O;L--;D.length--}var r=D[D.length-1];D.length--;D[D.length-1].buffer="";if(r.starts){I(r.starts,"")}return R.rE}if(w(M,R)){throw"Illegal"}}var E=e[B];var D=[E.dM];var A=0;var x=0;var y="";try{var s,u=0;E.dM.buffer="";do{s=p(C,u);var t=G(s[0],s[1],s[2]);u+=s[0].length;if(!t){u+=s[1].length}}while(!s[2]);if(D.length>1){throw"Illegal"}return{r:A,keyword_count:x,value:y}}catch(H){if(H=="Illegal"){return{r:0,keyword_count:0,value:m(C)}}else{throw H}}}function g(t){var p={keyword_count:0,r:0,value:m(t)};var r=p;for(var q in e){if(!e.hasOwnProperty(q)){continue}var s=d(q,t);s.language=q;if(s.keyword_count+s.r>r.keyword_count+r.r){r=s}if(s.keyword_count+s.r>p.keyword_count+p.r){r=p;p=s}}if(r.language){p.second_best=r}return p}function i(r,q,p){if(q){r=r.replace(/^((<[^>]+>|\t)+)/gm,function(t,w,v,u){return w.replace(/\t/g,q)})}if(p){r=r.replace(/\n/g,"<br>")}return r}function n(t,w,r){var x=h(t,r);var v=a(t);var y,s;if(v){y=d(v,x)}else{return}var q=c(t);if(q.length){s=document.createElement("pre");s.innerHTML=y.value;y.value=k(q,c(s),x)}y.value=i(y.value,w,r);var u=t.className;if(!u.match("(\\s|^)(language-)?"+v+"(\\s|$)")){u=u?(u+" "+v):v}if(/MSIE [678]/.test(navigator.userAgent)&&t.tagName=="CODE"&&t.parentNode.tagName=="PRE"){s=t.parentNode;var p=document.createElement("div");p.innerHTML="<pre><code>"+y.value+"</code></pre>";t=p.firstChild.firstChild;p.firstChild.cN=s.cN;s.parentNode.replaceChild(p.firstChild,s)}else{t.innerHTML=y.value}t.className=u;t.result={language:v,kw:y.keyword_count,re:y.r};if(y.second_best){t.second_best={language:y.second_best.language,kw:y.second_best.keyword_count,re:y.second_best.r}}}function o(){if(o.called){return}o.called=true;var r=document.getElementsByTagName("pre");for(var p=0;p<r.length;p++){var q=b(r[p]);if(q){n(q,hljs.tabReplace)}}}function l(){if(window.addEventListener){window.addEventListener("DOMContentLoaded",o,false);window.addEventListener("load",o,false)}else{if(window.attachEvent){window.attachEvent("onload",o)}else{window.onload=o}}}var e={};this.LANGUAGES=e;this.highlight=d;this.highlightAuto=g;this.fixMarkup=i;this.highlightBlock=n;this.initHighlighting=o;this.initHighlightingOnLoad=l;this.IR="[a-zA-Z][a-zA-Z0-9_]*";this.UIR="[a-zA-Z_][a-zA-Z0-9_]*";this.NR="\\b\\d+(\\.\\d+)?";this.CNR="\\b(0[xX][a-fA-F0-9]+|(\\d+(\\.\\d*)?|\\.\\d+)([eE][-+]?\\d+)?)";this.BNR="\\b(0b[01]+)";this.RSR="!|!=|!==|%|%=|&|&&|&=|\\*|\\*=|\\+|\\+=|,|\\.|-|-=|/|/=|:|;|<|<<|<<=|<=|=|==|===|>|>=|>>|>>=|>>>|>>>=|\\?|\\[|\\{|\\(|\\^|\\^=|\\||\\|=|\\|\\||~";this.ER="(?![\\s\\S])";this.BE={b:"\\\\.",r:0};this.ASM={cN:"string",b:"'",e:"'",i:"\\n",c:[this.BE],r:0};this.QSM={cN:"string",b:'"',e:'"',i:"\\n",c:[this.BE],r:0};this.CLCM={cN:"comment",b:"//",e:"$"};this.CBLCLM={cN:"comment",b:"/\\*",e:"\\*/"};this.HCM={cN:"comment",b:"#",e:"$"};this.NM={cN:"number",b:this.NR,r:0};this.CNM={cN:"number",b:this.CNR,r:0};this.BNM={cN:"number",b:this.BNR,r:0};this.inherit=function(r,s){var p={};for(var q in r){p[q]=r[q]}if(s){for(var q in s){p[q]=s[q]}}return p}}();hljs.LANGUAGES.cpp=function(){var a={keyword:{"false":1,"int":1,"float":1,"while":1,"private":1,"char":1,"catch":1,"export":1,virtual:1,operator:2,sizeof:2,dynamic_cast:2,typedef:2,const_cast:2,"const":1,struct:1,"for":1,static_cast:2,union:1,namespace:1,unsigned:1,"long":1,"throw":1,"volatile":2,"static":1,"protected":1,bool:1,template:1,mutable:1,"if":1,"public":1,friend:2,"do":1,"return":1,"goto":1,auto:1,"void":2,"enum":1,"else":1,"break":1,"new":1,extern:1,using:1,"true":1,"class":1,asm:1,"case":1,typeid:1,"short":1,reinterpret_cast:2,"default":1,"double":1,register:1,explicit:1,signed:1,typename:1,"try":1,"this":1,"switch":1,"continue":1,wchar_t:1,inline:1,"delete":1,alignof:1,char16_t:1,char32_t:1,constexpr:1,decltype:1,noexcept:1,nullptr:1,static_assert:1,thread_local:1,restrict:1,_Bool:1,complex:1},built_in:{std:1,string:1,cin:1,cout:1,cerr:1,clog:1,stringstream:1,istringstream:1,ostringstream:1,auto_ptr:1,deque:1,list:1,queue:1,stack:1,vector:1,map:1,set:1,bitset:1,multiset:1,multimap:1,unordered_set:1,unordered_map:1,unordered_multiset:1,unordered_multimap:1,array:1,shared_ptr:1}};return{dM:{k:a,i:"</",c:[hljs.CLCM,hljs.CBLCLM,hljs.QSM,{cN:"string",b:"'\\\\?.",e:"'",i:"."},{cN:"number",b:"\\b(\\d+(\\.\\d*)?|\\.\\d+)(u|U|l|L|ul|UL|f|F)"},hljs.CNM,{cN:"preprocessor",b:"#",e:"$"},{cN:"stl_container",b:"\\b(deque|list|queue|stack|vector|map|set|bitset|multiset|multimap|unordered_map|unordered_set|unordered_multiset|unordered_multimap|array)\\s*<",e:">",k:a,r:10,c:["self"]}]}}}();hljs.LANGUAGES.r={dM:{c:[hljs.HCM,{cN:"number",b:"\\b0[xX][0-9a-fA-F]+[Li]?\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"number",b:"\\b\\d+(?:[eE][+\\-]?\\d*)?L\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"number",b:"\\b\\d+\\.(?!\\d)(?:i\\b)?",e:hljs.IMMEDIATE_RE,r:1},{cN:"number",b:"\\b\\d+(?:\\.\\d*)?(?:[eE][+\\-]?\\d*)?i?\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"number",b:"\\.\\d+(?:[eE][+\\-]?\\d*)?i?\\b",e:hljs.IMMEDIATE_RE,r:1},{cN:"keyword",b:"(?:tryCatch|library|setGeneric|setGroupGeneric)\\b",e:hljs.IMMEDIATE_RE,r:10},{cN:"keyword",b:"\\.\\.\\.",e:hljs.IMMEDIATE_RE,r:10},{cN:"keyword",b:"\\.\\.\\d+(?![\\w.])",e:hljs.IMMEDIATE_RE,r:10},{cN:"keyword",b:"\\b(?:function)",e:hljs.IMMEDIATE_RE,r:2},{cN:"keyword",b:"(?:if|in|break|next|repeat|else|for|return|switch|while|try|stop|warning|require|attach|detach|source|setMethod|setClass)\\b",e:hljs.IMMEDIATE_RE,r:1},{cN:"literal",b:"(?:NA|NA_integer_|NA_real_|NA_character_|NA_complex_)\\b",e:hljs.IMMEDIATE_RE,r:10},{cN:"literal",b:"(?:NULL|TRUE|FALSE|T|F|Inf|NaN)\\b",e:hljs.IMMEDIATE_RE,r:1},{cN:"identifier",b:"[a-zA-Z.][a-zA-Z0-9._]*\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"operator",b:"<\\-(?!\\s*\\d)",e:hljs.IMMEDIATE_RE,r:2},{cN:"operator",b:"\\->|<\\-",e:hljs.IMMEDIATE_RE,r:1},{cN:"operator",b:"%%|~",e:hljs.IMMEDIATE_RE},{cN:"operator",b:">=|<=|==|!=|\\|\\||&&|=|\\+|\\-|\\*|/|\\^|>|<|!|&|\\||\\$|:",e:hljs.IMMEDIATE_RE,r:0},{cN:"operator",b:"%",e:"%",i:"\\n",r:1},{cN:"identifier",b:"`",e:"`",r:0},{cN:"string",b:'"',e:'"',c:[hljs.BE],r:0},{cN:"string",b:"'",e:"'",c:[hljs.BE],r:0},{cN:"paren",b:"[[({\\])}]",e:hljs.IMMEDIATE_RE,r:0}]}};
+hljs.initHighlightingOnLoad();
+</script>
+
+
+
+<style type="text/css">
+body, td {
+   font-family: sans-serif;
+   background-color: white;
+   font-size: 13px;
+}
+
+body {
+  max-width: 800px;
+  margin: auto;
+  padding: 1em;
+  line-height: 20px;
+}
+
+tt, code, pre {
+   font-family: 'DejaVu Sans Mono', 'Droid Sans Mono', 'Lucida Console', Consolas, Monaco, monospace;
+}
+
+h1 {
+   font-size:2.2em;
+}
+
+h2 {
+   font-size:1.8em;
+}
+
+h3 {
+   font-size:1.4em;
+}
+
+h4 {
+   font-size:1.0em;
+}
+
+h5 {
+   font-size:0.9em;
+}
+
+h6 {
+   font-size:0.8em;
+}
+
+a:visited {
+   color: rgb(50%, 0%, 50%);
+}
+
+pre, img {
+  max-width: 100%;
+}
+
+pre code {
+   display: block; padding: 0.5em;
+}
+
+code {
+  font-size: 92%;
+  border: 1px solid #ccc;
+}
+
+code[class] {
+  background-color: #F8F8F8;
+}
+
+table, td, th {
+  border: none;
+}
+
+blockquote {
+   color:#666666;
+   margin:0;
+   padding-left: 1em;
+   border-left: 0.5em #EEE solid;
+}
+
+hr {
+   height: 0px;
+   border-bottom: none;
+   border-top-width: thin;
+   border-top-style: dotted;
+   border-top-color: #999999;
+}
+
+@media print {
+   * {
+      background: transparent !important;
+      color: black !important;
+      filter:none !important;
+      -ms-filter: none !important;
+   }
+
+   body {
+      font-size:12pt;
+      max-width:100%;
+   }
+
+   a, a:visited {
+      text-decoration: underline;
+   }
+
+   hr {
+      visibility: hidden;
+      page-break-before: always;
+   }
+
+   pre, blockquote {
+      padding-right: 1em;
+      page-break-inside: avoid;
+   }
+
+   tr, img {
+      page-break-inside: avoid;
+   }
+
+   img {
+      max-width: 100% !important;
+   }
+
+   @page :left {
+      margin: 15mm 20mm 15mm 10mm;
+   }
+
+   @page :right {
+      margin: 15mm 10mm 15mm 20mm;
+   }
+
+   p, h2, h3 {
+      orphans: 3; widows: 3;
+   }
+
+   h2, h3 {
+      page-break-after: avoid;
+   }
+}
+</style>
+
+
+
+</head>
+
+<body>
+<h1>Trafi open data analysis</h1>
+
+<p>Data available from <a href="http://www.trafi.fi/tietopalvelut/avoin_data">Trafi avoin data</a>. Data published under the <a href="http://www.trafi.fi/tietopalvelut/avoin_data/avoimen_datan_lisenssi">Trafi open data license</a>. </p>
+
+<h2>Setting up H2O</h2>
+
+<p>Let&#39;s first install H2O. This part needs to be run only once.</p>
+
+<pre><code class="r"># The H2O R package in CRAN is not necessarily up to date
+# The latest R package is included main H2O package in http://0xdata.com/download/
+
+# You can either download and unzip it manually, or from R with the following to lines
+download.file(&quot;http://h2o-release.s3.amazonaws.com/h2o/rel-lagrange/11/h2o-2.6.0.11.zip&quot;, destfile=&quot;./h2o/h2o-2.6.0.11.zip&quot;)
+unzip(&quot;./h2o/h2o-2.6.0.11.zip&quot;, exdir = &quot;./h2o&quot;)
+
+# Install the R package from the source file provided
+# Note! You may need to install some dependecies!
+install.packages(&quot;h2o/h2o-2.6.0.11/R/h2o_2.6.0.11.tar.gz&quot;, repos=NULL, type=&quot;source&quot;)
+</code></pre>
+
+<p>Then load the R packge and start H2O in the background, which takes a bit of time.</p>
+
+<pre><code class="r"># Load library
+library(&quot;h2o&quot;)
+# Initialize h2o (by default, this will start H2O) 
+H2Olocal &lt;- h2o.init()
+</code></pre>
+
+<pre><code>## Successfully connected to http://127.0.0.1:54321 
+## R is connected to H2O cluster:
+##     H2O cluster uptime:         3 hours 25 minutes 
+##     H2O cluster version:        2.6.0.11 
+##     H2O cluster name:           H2O_started_from_R 
+##     H2O cluster total nodes:    1 
+##     H2O cluster total memory:   0.91 GB 
+##     H2O cluster total cores:    4 
+##     H2O cluster allowed cores:  4 
+##     H2O cluster healthy:        TRUE
+</code></pre>
+
+<h2>Load data to H2O</h2>
+
+<p>The Trafi car registry data is available <a href="http://www.trafi.fi/tietopalvelut/avoin_data">here</a>. The data is given in csv format, which H2O should be able to parse, but there appears to be some problems:</p>
+
+<ul>
+<li>If a string column contains even one numeric value, the strings will disappear</li>
+<li>Character encoding can not be specified</li>
+</ul>
+
+<p>It seems that these can not be handled by H2O (yet, remember its in early development phase only!), so to include those columns in the data properly, they need to be fixed beforehand.</p>
+
+<p>Here we cheat a little and simply fix those in R. For really big data this would be more tricky, maybe read and fix the data in chunks, or use database and tools such as Hive to deal with it.</p>
+
+<pre><code class="r"># Simply read the data into R and write it again as csv, this time with quotes
+temp.trafi &lt;- read.csv(&quot;data.csv&quot;)
+write.csv(temp.trafi, file=&quot;data_quoted.csv&quot;, quote=TRUE, row.names=FALSE)
+</code></pre>
+
+<p>Then we can import the data into H2O using <code>h2o.importFile()</code>. Data can also be loaded using url&#39;s or from HDFS.
+The data will be imported as an H2OParsedData object. The data could be pulled into R with <code>as.data.frame()</code>,
+but this is not feasible for big data sets. To demonstrate the H2O tools, we&#39;ll keep the data in H2O format for now.</p>
+
+<pre><code class="r"># Import data 
+trafi.original.hex &lt;- h2o.importFile(H2Olocal, path=&quot;data_quoted.csv&quot;, parse=TRUE, header=TRUE, sep=&quot;,&quot;)
+</code></pre>
+
+<pre><code>## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=======                                                          |  10%
+  |                                                                       
+  |========                                                         |  12%
+  |                                                                       
+  |=========                                                        |  14%
+  |                                                                       
+  |=================                                                |  26%
+  |                                                                       
+  |=========================                                        |  39%
+  |                                                                       
+  |==============================                                   |  46%
+  |                                                                       
+  |=================================                                |  51%
+  |                                                                       
+  |======================================                           |  58%
+  |                                                                       
+  |===========================================                      |  66%
+  |                                                                       
+  |====================================================             |  80%
+  |                                                                       
+  |=======================================================          |  85%
+  |                                                                       
+  |================================================================ |  99%
+  |                                                                       
+  |=================================================================| 100%
+</code></pre>
+
+<pre><code class="r"># Let&#39;s see what the imported H2OParsedData object looks like
+str(trafi.original.hex)
+</code></pre>
+
+<pre><code>## Formal class &#39;H2OParsedData&#39; [package &quot;h2o&quot;] with 7 slots
+##   ..@ h2o      :Formal class &#39;H2OClient&#39; [package &quot;h2o&quot;] with 2 slots
+##   .. .. ..@ ip  : chr &quot;127.0.0.1&quot;
+##   .. .. ..@ port: num 54321
+##   ..@ key      : chr &quot;data_quoted9.hex&quot;
+##   ..@ logic    : logi FALSE
+##   ..@ col_names: chr  &quot;ajoneuvoluokka&quot; &quot;ensirekisterointipvm&quot; &quot;ajoneuvoryhma&quot; &quot;ajoneuvonkaytto&quot; ...
+##   ..@ nrows    : num 2609480
+##   ..@ ncols    : num 32
+##   ..@ any_enum : logi TRUE
+## 
+## H2O dataset &#39;data_quoted9.hex&#39;:  2609480 obs. of  32 variables:
+## $ ajoneuvoluokka           : Factor w/ 2 levels &quot;M1&quot;,&quot;M1G&quot;:  ...
+## $ ensirekisterointipvm     : num   ...
+## $ ajoneuvoryhma            : num   ...
+## $ ajoneuvonkaytto          : num   ...
+## $ kayttoonottopvm          : num   ...
+## $ vari                     : num   ...
+## $ ovienLukumaara           : num   ...
+## $ korityyppi               : Factor w/ 20 levels &quot;1.7&quot;,&quot;AA&quot;,..:  ...
+## $ ohjaamotyyppi            : num   ...
+## $ istumapaikkojenLkm       : num   ...
+## $ omamassa                 : num   ...
+## $ teknSuurSallKokmassa     : num   ...
+## $ tieliikSuurSallKokmassa  : num   ...
+## $ ajonKokPituus            : num   ...
+## $ ajonLeveys               : num   ...
+## $ ajonKorkeus              : num   ...
+## $ kayttovoima              : num   ...
+## $ iskutilavuus             : num   ...
+## $ suurinNettoteho          : num   ...
+## $ sylintereidenLkm         : num   ...
+## $ ahdin                    : Factor w/ 2 levels &quot;false&quot;,&quot;true&quot;:  ...
+## $ merkkiSelvakielinen      : Factor w/ 1245 levels &quot;ACADIAN&quot;,&quot;ACURA&quot;,..:  ...
+## $ mallimerkinta            : num   ...
+## $ vaihteisto               : num   ...
+## $ vaihteidenLkm            : num   ...
+## $ kaupallinenNimi          : num   ...
+## $ voimanvalJaTehostamistapa: num   ...
+## $ tyyppihyvaksyntanro      : Factor w/ 20179 levels &quot;*&quot;,&quot;***************&quot;,..:  ...
+## $ yksittaisKayttovoima     : num   ...
+## $ kunta                    : num   ...
+## $ Co2                      : num   ...
+## $ jarnro                   : num   ...
+</code></pre>
+
+<p>Trafi also provides some annotations used in the data in a separate excel file, so let&#39;s download and read those too.</p>
+
+<pre><code class="r">download.file(url = &quot;http://www.trafi.fi/filebank/a/1402650899/782fd1d67f9f64628ae4e330c6a88b6a/14931-Koodisto.xlsx&quot;, destfile = &quot;14931-Koodisto.xlsx&quot;)
+library(&quot;gdata&quot;)
+trafi.codes &lt;- read.xls(&quot;14931-Koodisto.xlsx&quot;)
+</code></pre>
+
+<h2>Process data using H2O tools</h2>
+
+<p>A few colums are still not parsing right (e.g. mallimerkinta, kaupallinenNimi), but will forget those for now.
+There are in total 33 variables included. For the analysis we&#39;ll keep only a subset of them and translate their names to English.</p>
+
+<pre><code class="r"># Choose a subset of the variables and translate to English
+trafi.hex &lt;- trafi.original.hex[,c(2,5,6,7,10,11,14,15,16,17,18,19,20,21,22,31)]
+names(trafi.hex) &lt;- c(&quot;Registering_date&quot;, &quot;Starting_date&quot;, &quot;Colour&quot;, &quot;Door_amount&quot;, 
+                      &quot;Seat_amount&quot;, &quot;Weight&quot;, &quot;Length&quot;, &quot;Width&quot;, 
+                      &quot;Height&quot;, &quot;Energy_source&quot;, &quot;Cylinder_capacity&quot;, &quot;Net_power&quot;,
+                      &quot;Cylinder_amount&quot;, &quot;Compressor&quot;, &quot;Manufacturer&quot;, &quot;CO2&quot;)
+</code></pre>
+
+<p>Some of the variables contain numeric codes and the corresponding annotations are given in a separate file.
+However, I could not yet figure out how to replace factor values in H2O, so we will keep the numeric values for now.
+H2O contains some useful functions for processing date values, such as <code>h2o.year</code>, which we&#39;ll use next.</p>
+
+<p>Maybe the hardest part in using H2O instead of R is the limited set of tools available. And I have probably missed some things
+that would be doable in H2O&hellip;</p>
+
+<pre><code class="r"># Change these to factors
+trafi.hex$Colour &lt;- as.factor(trafi.hex$Colour)
+trafi.hex$Energy_source &lt;- as.factor(trafi.hex$Energy_source)
+
+# Registering date is give in milliseconds
+# Convert that to a year with h2o.year()
+trafi.hex$Registering_year &lt;- h2o.year(trafi.hex$Registering_date) + 1900
+
+# Start of usage date is given in year month date without separators
+# Convert to year simply by diving by 10000 and taking floor
+trafi.hex$Starting_year &lt;- floor(trafi.hex$Starting_date/10000)
+
+# Remove original date columms
+trafi.hex &lt;- trafi.hex[,-c(1,2)]
+</code></pre>
+
+<h2>Explore and filter data</h2>
+
+<p>A very commont step in data analysis is to explore the data and try to detect any anomalies, missing data and outliers.
+Visualization is a very handy tool for this, but with big data we can not do that, as it&#39;s not possible to plot gazillions
+of data points.</p>
+
+<p>A good starting point to explore the data is to use the <code>summary()</code> function to get an idea of how the variables are distributed,
+how many values are missing, and whether there are some alarming extreme values. Luckily, the <code>summary()</code> works for H2O objects also,
+so we&#39;ll use that here. Indeed there seem to be some very high numerical values, so we&#39;ll set some arbitrary thresholds to filter the data.</p>
+
+<pre><code class="r"># Summarise the data
+summary(trafi.hex)
+</code></pre>
+
+<pre><code>##  Colour       Door_amount       Seat_amount      Weight            
+##  8   :549187  Min.   :  0.000   Min.   : 1.000   Min.   :       0  
+##  2   :476714  1st Qu.:  4.000   1st Qu.: 5.000   1st Qu.:    4675  
+##  6   :414795  Median :  4.000   Median : 5.000   Median :    9350  
+##  0   :305360  Mean   :  3.983   Mean   : 5.053   Mean   :    1409  
+##  9   :212307  3rd Qu.:  4.000   3rd Qu.: 5.000   3rd Qu.:   14025  
+##  NA&#39;s:215010  Max.   :100.000   Max.   :56.000   Max.   :18911958  
+##  Length          Width              Height             Energy_source
+##  Min.   :   40   Min.   :      10   Min.   :     117   1   :1961818 
+##  1st Qu.: 4248   1st Qu.:    4339   1st Qu.:    3767   2   : 642755 
+##  Median : 4481   Median :    8668   Median :    7418   40  :   3105 
+##  Mean   : 4455   Mean   :    1761   Mean   :    1514   38  :    899 
+##  3rd Qu.: 4678   3rd Qu.:   12996   3rd Qu.:   11068   39  :    276 
+##  Max.   :48403   Max.   :18001440   Max.   :14641028   NA&#39;s:     56 
+##  Cylinder_capacity Net_power           Cylinder_amount    Compressor    
+##  Min.   :      2   Min.   :     0.00   Min.   :   1.000   true : 840425 
+##  1st Qu.:   1108   1st Qu.:    34.58   1st Qu.:   2.257   false: 355336 
+##  Median :   2214   Median :    69.15   Median :   3.514   NA&#39;s :1413719 
+##  Mean   :   1847   Mean   :    90.83   Mean   :   4.146                 
+##  3rd Qu.:   3320   3rd Qu.:   103.73   3rd Qu.:   4.771                 
+##  Max.   :4398000   Max.   :125145.00   Max.   :5300.000                 
+##  Manufacturer       CO2             Registering_year Starting_year 
+##  Toyota    :339399  Min.   :  0.0   Min.   :1975     Min.   :   0  
+##  Volkswagen:269044  1st Qu.:145.0   1st Qu.:2000     1st Qu.:1999  
+##  Volvo     :205026  Median :165.0   Median :2005     Median :2004  
+##  Ford      :194672  Mean   :168.4   Mean   :2004     Mean   :2003  
+##  Nissan    :168783  3rd Qu.:187.0   3rd Qu.:2009     3rd Qu.:2008  
+##  NA&#39;s      :    45  Max.   :630.0   Max.   :2014     Max.   :2014
+</code></pre>
+
+<pre><code class="r"># Change these to factors
+# The Min. and Max. value reveal some outliers, let&#39;s filter those out
+# Note! Cutoffs chosen very arbitrarily now, can be improved later
+trafi.clean.hex &lt;- trafi.hex[trafi.hex$Door_amount &lt; 10 &amp; 
+                               trafi.hex$Seat_amount &lt; 50 &amp; 
+                               trafi.hex$Weight &lt; 100000 &amp; 
+                               trafi.hex$Length &lt; 10000 &amp;
+                               trafi.hex$Width &lt; 20000 &amp;
+                               trafi.hex$Height &lt; 20000 &amp;
+                               trafi.hex$Net_power &lt; 1000 &amp;
+                               trafi.hex$Cylinder_amount &lt; 10 &amp;
+                               trafi.hex$CO2 &gt; 0, ]
+</code></pre>
+
+<p>For a quick analysis, we are interested in the most common car manufacturers in the data.
+We can identify those using <code>h2o.table()</code> and processing the results in R. Then we can take 
+a subset of the original data with only the most common manufacturers. </p>
+
+<p>Note! In R we have very useful tools for filtering data based on factor values, such as <code>match()</code> and <code>%in%</code>. However, those are not (yet) available in H2O, so we need a trick to get the subset without repeating a lot of code.</p>
+
+<pre><code class="r"># Take only the most common manufacturers
+# Note! There are a lot of messy manufacturer names, which should be cleaned.
+man.table &lt;- as.data.frame(h2o.table(trafi.clean.hex$Manufacturer))
+man.tokeep &lt;- as.character(man.table$row.names[man.table$Count &gt; 10000])
+# Remove Volkswagen VW, need to fix this later
+man.tokeep &lt;- man.tokeep[man.tokeep!=&quot;Volkswagen VW&quot;]
+
+# H2O does not support match or %in%, so we&#39;ll need a trick to take a subset based on a group of factor values
+subset.expression &lt;- paste(&quot;trafi.clean.hex$Manufacturer == man.tokeep[&quot;,1:length(man.tokeep),&quot;]&quot;, sep=&quot;&quot;, collapse=&quot; | &quot;)
+trafi.clean.hex &lt;- eval(parse(text=paste0(&quot;trafi.clean.hex[&quot;, subset.expression,&quot;,]&quot;)))
+</code></pre>
+
+<p>Once individual variables are somewhat ok, the exploration can turn to studying relationships between variables.
+Here again visualizations, especially scatter plots, would be very useful. But even without being able to plot the data,
+we can do something still. Here we&#39;ll use the <code>cut()</code> and <code>quantile()</code> functions provided in H2O to group numerical values into groups.
+Then we can use <code>h2o.table()</code> to create a cross table of two such variables, pull the results to R and visualize them! As an example, we&#39;ll group the Weight variable and then study the proportion of cars in each weight group over the years.</p>
+
+<pre><code class="r"># Load some necessary packages
+library(&quot;ggplot2&quot;)
+theme_set(theme_grey(base_size = 24))
+library(&quot;reshape2&quot;)
+library(&quot;plyr&quot;)
+
+# Study distribution of the Weight variable
+quantile(trafi.clean.hex$Weight, na.rm=TRUE)
+</code></pre>
+
+<pre><code>##    0%   25%   50%   75%  100% 
+##     0  1182  1350  1520 20000
+</code></pre>
+
+<pre><code class="r"># 0%   25%   50%   75%  100% 
+#  0  1182  1350  1520 20000 
+
+# Group weight into discrete variables
+trafi.clean.hex$Weight.cut &lt;- h2o.cut(trafi.clean.hex$Weight, quantile(trafi.clean.hex$Weight, na.rm=TRUE))
+
+# Now we can use cross tables to compare variables, e.g. weights and years
+wy.table &lt;- h2o.table(trafi.clean.hex[c(&quot;Registering_year&quot;, &quot;Weight.cut&quot;)])
+
+# This table we can pull into R for plotting using as.data.frame()
+wy.df &lt;- as.data.frame(wy.table)
+names(wy.df) &lt;- c(&quot;Registering_year&quot;, &quot;0-1182&quot;, &quot;118-1350&quot;, &quot;1350-1520&quot;, &quot;1520-&quot;)
+# Transform into a more convenient form
+wy.df &lt;- reshape2::melt(wy.df, id.var=&quot;Registering_year&quot;)
+names(wy.df)[2] &lt;- &quot;WeightGroup&quot;
+# Compute proportion of different Weight groups per year
+wy.df &lt;- plyr::ddply(wy.df, &quot;Registering_year&quot;, transform, Proportion=value/sum(value))
+# Plot
+ggplot(wy.df, aes(x=Registering_year, y=WeightGroup)) + geom_tile(aes(fill=Proportion))# + theme(legend.position=&quot;bottom&quot;)# + guides(fill=guide_legend(keywidth=3))
+</code></pre>
+
+<p><img src="figure/weight_vs_year.png" alt="plot of chunk weight_vs_year"/> </p>
+
+<p>The visualization shows a pretty clear trend where most of the cars are very small until around 1995,
+when the distribution starts to gradually shift towards larger cars.</p>
+
+<h2>Quantify relationships between variables with linear regression</h2>
+
+<p>Next we want to do some proper quantitative analysis on the data. Specifically, we are interested in
+how the other variables affect the CO2 emissions of the cars. Here linear regression is very good first tool,
+as it gives nicely interpretable results. H2O provides the <code>h2o.glm()</code> function which can be used for linear regression.</p>
+
+<pre><code class="r"># Center numerical variables to start from zero
+trafi.clean.hex$Year_n &lt;- trafi.clean.hex$Registering_year - mean(trafi.clean.hex$Registering_year, na.rm=TRUE)
+trafi.clean.hex$Weight_n &lt;- trafi.clean.hex$Weight - mean(trafi.clean.hex$Weight, na.rm=TRUE)
+# Run linear regression
+trafi.glm &lt;- h2o.glm(y=&quot;CO2&quot;, x=c(&quot;Year_n&quot;, &quot;Weight_n&quot;, &quot;Energy_source&quot;, &quot;Compressor&quot;, &quot;Manufacturer&quot;), data=trafi.clean.hex,
+                     family=&quot;gaussian&quot;, alpha=0.5, variable_importances=TRUE, use_all_factor_levels=TRUE, standardize=FALSE)
+</code></pre>
+
+<pre><code>## 
+  |                                                                       
+  |                                                                 |   0%
+  |                                                                       
+  |=================================================================| 100%
+</code></pre>
+
+<pre><code class="r"># Separate coefficients for manufactures, energy sources, and other factors
+coefs &lt;- trafi.glm@model$coefficients
+coefs.manufactures &lt;- sort(coefs[grep(&quot;Manufacturer&quot;, names(coefs))], decreasing = TRUE)
+coefs.energysource &lt;- sort(coefs[grep(&quot;Energy_source&quot;, names(coefs))], decreasing = TRUE)
+coefs.other &lt;- coefs[!(names(coefs) %in% c(names(coefs.manufactures), names(coefs.energysource)))]
+names(coefs.manufactures) &lt;- gsub(&quot;Manufacturer.&quot;, &quot;&quot;, names(coefs.manufactures))
+
+# Translate energy source codes appearing in the model to understandable ones
+# Note! This is not needed when we figure out how to fix the levels already in H2O
+energysource.codes &lt;- droplevels(subset(trafi.codes, KOODISTONKUVAUS==&quot;Polttoaine&quot; &amp; KIELI==&quot;en&quot;))
+energysource.codes$KOODINTUNNUS &lt;- as.numeric(as.character(energysource.codes$KOODINTUNNUS))
+es.codes.num &lt;- as.numeric(gsub(&quot;Energy_source.&quot;, &quot;&quot;, names(coefs.energysource)))
+names(coefs.energysource) &lt;- as.character(energysource.codes$LYHYTSELITE[match(es.codes.num, energysource.codes$KOODINTUNNUS)])
+</code></pre>
+
+<p>The output of the regression is tells us how each supplied factor affects the CO2 levels. The unit of CO2 is g/km. </p>
+
+<pre><code class="r"># Plot the  the effect of force types
+en.df &lt;- data.frame(Energy_source=factor(names(coefs.energysource), levels=names(coefs.energysource)), Coefficient=coefs.energysource)
+ggplot(en.df, aes(x=Energy_source, y=Coefficient)) + geom_bar(stat=&quot;identity&quot;) + coord_flip() + ylab(&quot;CO2 coefficient (g/km)&quot;)
+</code></pre>
+
+<p><img src="figure/coef_plot_energy.png" alt="plot of chunk coef_plot_energy"/> </p>
+
+<pre><code class="r"># Plot the  the effect of force types
+man.df &lt;- data.frame(Manufacturer=factor(names(coefs.manufactures), levels=names(coefs.manufactures)), Coefficient=coefs.manufactures)
+ggplot(man.df, aes(x=Manufacturer, y=Coefficient)) + geom_bar(stat=&quot;identity&quot;) + coord_flip() + ylab(&quot;CO2 coefficient (g/km)&quot;)
+</code></pre>
+
+<p><img src="figure/coef_plot_manufacturer.png" alt="plot of chunk coef_plot_manufacturer"/> </p>
+
+<p>Let&#39;s also check the remaining factors that were included in the regression.</p>
+
+<pre><code class="r">coefs.other
+</code></pre>
+
+<pre><code>## Compressor.false  Compressor.true           Year_n         Weight_n 
+##           3.2468          -3.2468          -4.6118           0.1162 
+##        Intercept 
+##         142.2834
+</code></pre>
+
+<p>So having a compressor has a very small reducing effect on the CO2 emissions. The emissions also decrease on average about 5g/km per year for new cars. Weight has a very small effect. The <code>Intercept</code> is the baseline of the CO2 level, and is indeed very close to the average CO2 value over the data.</p>
+
+<h2>Shut down H2O</h2>
+
+<p>Note that quitting R now would not necessarily shut down the H2O running on the background,
+so it&#39;s good to explicitly shut it down.</p>
+
+<pre><code class="r">h2o.shutdown(H2Olocal)
+</code></pre>
+
+<h2>Session info</h2>
+
+<pre><code class="r">sessionInfo()
+</code></pre>
+
+<pre><code>## R version 3.1.1 (2014-07-10)
+## Platform: x86_64-apple-darwin13.1.0 (64-bit)
+## 
+## locale:
+## [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+## 
+## attached base packages:
+## [1] tools     stats     graphics  grDevices utils     datasets  methods  
+## [8] base     
+## 
+## other attached packages:
+##  [1] plyr_1.8.1     reshape2_1.4   ggplot2_1.0.0  gdata_2.13.3  
+##  [5] h2o_2.6.0.11   statmod_1.4.20 rjson_0.2.14   RCurl_1.95-4.3
+##  [9] bitops_1.0-6   knitr_1.6     
+## 
+## loaded via a namespace (and not attached):
+##  [1] colorspace_1.2-4 digest_0.6.4     evaluate_0.5.5   formatR_0.10    
+##  [5] grid_3.1.1       gtable_0.1.2     gtools_3.4.1     labeling_0.2    
+##  [9] markdown_0.7.2   MASS_7.3-33      munsell_0.4.2    proto_0.3-10    
+## [13] Rcpp_0.11.2      scales_0.2.4     stringr_0.6.2
+</code></pre>
+
+</body>
+
+</html>
