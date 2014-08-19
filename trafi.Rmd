@@ -1,3 +1,5 @@
+
+
 ```{r knit, eval=FALSE, echo=FALSE}
 # Hot to knit this document into .md and .html
 library(knitr)
@@ -8,7 +10,15 @@ knit2html(input="trafi.md", output="trafi.html", options=c("use_xhtml","smartypa
 Trafi open data analysis
 ========================
 
-Data available from [Trafi avoin data](http://www.trafi.fi/tietopalvelut/avoin_data). Data published under the [Trafi open data license](http://www.trafi.fi/tietopalvelut/avoin_data/avoimen_datan_lisenssi). 
+TODO
+* finalize interpretations of regression results
+* add note that the data is very dirty, and the analysis is far from comprehensive
+
+This document describes the analysis of the Trafi open data. The analysis is implemented with [R](http://www.r-project.org/), and this document is created with the [knitr-packge](http://yihui.name/knitr/).
+
+The document contains a lot of technical details, so if you wish you can skip straight to the [results](#quantify-relationships-between-variables-with-linear-regression).
+
+The data is available from [Trafi avoin data](http://www.trafi.fi/tietopalvelut/avoin_data). Data published under the [Trafi open data license](http://www.trafi.fi/tietopalvelut/avoin_data/avoimen_datan_lisenssi). 
 
 
 ## Setting up H2O

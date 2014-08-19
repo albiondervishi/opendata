@@ -189,7 +189,11 @@ hr {
 <body>
 <h1>Trafi open data analysis</h1>
 
-<p>Data available from <a href="http://www.trafi.fi/tietopalvelut/avoin_data">Trafi avoin data</a>. Data published under the <a href="http://www.trafi.fi/tietopalvelut/avoin_data/avoimen_datan_lisenssi">Trafi open data license</a>. </p>
+<p>This document describes the analysis of the Trafi open data. The analysis is implemented with <a href="http://www.r-project.org/">R</a>, and this document is created with the <a href="http://yihui.name/knitr/">knitr-packge</a>.</p>
+
+<p>The document contains a lot of technical details, so if you wish you can skip straight to the <a href="#quantify-relationships-between-variables-with-linear-regression">results</a>.</p>
+
+<p>The data is available from <a href="http://www.trafi.fi/tietopalvelut/avoin_data">Trafi avoin data</a>. Data published under the <a href="http://www.trafi.fi/tietopalvelut/avoin_data/avoimen_datan_lisenssi">Trafi open data license</a>. </p>
 
 <h2>Setting up H2O</h2>
 
@@ -217,11 +221,11 @@ H2Olocal &lt;- h2o.init()
 
 <pre><code>## Successfully connected to http://127.0.0.1:54321 
 ## R is connected to H2O cluster:
-##     H2O cluster uptime:         3 hours 25 minutes 
+##     H2O cluster uptime:         3 hours 52 minutes 
 ##     H2O cluster version:        2.6.0.11 
 ##     H2O cluster name:           H2O_started_from_R 
 ##     H2O cluster total nodes:    1 
-##     H2O cluster total memory:   0.91 GB 
+##     H2O cluster total memory:   0.89 GB 
 ##     H2O cluster total cores:    4 
 ##     H2O cluster allowed cores:  4 
 ##     H2O cluster healthy:        TRUE
@@ -259,27 +263,23 @@ trafi.original.hex &lt;- h2o.importFile(H2Olocal, path=&quot;data_quoted.csv&quo
   |                                                                       
   |=======                                                          |  10%
   |                                                                       
-  |========                                                         |  12%
+  |==========                                                       |  15%
   |                                                                       
-  |=========                                                        |  14%
+  |==========                                                       |  16%
   |                                                                       
-  |=================                                                |  26%
+  |==================                                               |  27%
   |                                                                       
-  |=========================                                        |  39%
+  |==========================                                       |  39%
   |                                                                       
-  |==============================                                   |  46%
+  |==================================                               |  53%
   |                                                                       
-  |=================================                                |  51%
+  |=====================================                            |  57%
   |                                                                       
-  |======================================                           |  58%
+  |==============================================                   |  71%
   |                                                                       
-  |===========================================                      |  66%
+  |======================================================           |  84%
   |                                                                       
-  |====================================================             |  80%
-  |                                                                       
-  |=======================================================          |  85%
-  |                                                                       
-  |================================================================ |  99%
+  |===============================================================  |  97%
   |                                                                       
   |=================================================================| 100%
 </code></pre>
@@ -292,14 +292,14 @@ str(trafi.original.hex)
 ##   ..@ h2o      :Formal class &#39;H2OClient&#39; [package &quot;h2o&quot;] with 2 slots
 ##   .. .. ..@ ip  : chr &quot;127.0.0.1&quot;
 ##   .. .. ..@ port: num 54321
-##   ..@ key      : chr &quot;data_quoted9.hex&quot;
+##   ..@ key      : chr &quot;data_quoted10.hex&quot;
 ##   ..@ logic    : logi FALSE
 ##   ..@ col_names: chr  &quot;ajoneuvoluokka&quot; &quot;ensirekisterointipvm&quot; &quot;ajoneuvoryhma&quot; &quot;ajoneuvonkaytto&quot; ...
 ##   ..@ nrows    : num 2609480
 ##   ..@ ncols    : num 32
 ##   ..@ any_enum : logi TRUE
 ## 
-## H2O dataset &#39;data_quoted9.hex&#39;:  2609480 obs. of  32 variables:
+## H2O dataset &#39;data_quoted10.hex&#39;: 2609480 obs. of  32 variables:
 ## $ ajoneuvoluokka           : Factor w/ 2 levels &quot;M1&quot;,&quot;M1G&quot;:  ...
 ## $ ensirekisterointipvm     : num   ...
 ## $ ajoneuvoryhma            : num   ...

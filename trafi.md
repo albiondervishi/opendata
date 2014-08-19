@@ -1,9 +1,15 @@
 
 
+
+
 Trafi open data analysis
 ========================
 
-Data available from [Trafi avoin data](http://www.trafi.fi/tietopalvelut/avoin_data). Data published under the [Trafi open data license](http://www.trafi.fi/tietopalvelut/avoin_data/avoimen_datan_lisenssi). 
+This document describes the analysis of the Trafi open data. The analysis is implemented with [R](http://www.r-project.org/), and this document is created with the [knitr-packge](http://yihui.name/knitr/).
+
+The document contains a lot of technical details, so if you wish you can skip straight to the [results](#quantify-relationships-between-variables-with-linear-regression).
+
+The data is available from [Trafi avoin data](http://www.trafi.fi/tietopalvelut/avoin_data). Data published under the [Trafi open data license](http://www.trafi.fi/tietopalvelut/avoin_data/avoimen_datan_lisenssi). 
 
 
 ## Setting up H2O
@@ -37,11 +43,11 @@ H2Olocal <- h2o.init()
 ```
 ## Successfully connected to http://127.0.0.1:54321 
 ## R is connected to H2O cluster:
-##     H2O cluster uptime:         3 hours 25 minutes 
+##     H2O cluster uptime:         3 hours 52 minutes 
 ##     H2O cluster version:        2.6.0.11 
 ##     H2O cluster name:           H2O_started_from_R 
 ##     H2O cluster total nodes:    1 
-##     H2O cluster total memory:   0.91 GB 
+##     H2O cluster total memory:   0.89 GB 
 ##     H2O cluster total cores:    4 
 ##     H2O cluster allowed cores:  4 
 ##     H2O cluster healthy:        TRUE
@@ -76,7 +82,7 @@ trafi.original.hex <- h2o.importFile(H2Olocal, path="data_quoted.csv", parse=TRU
 ```
 
 ```
-##   |                                                                         |                                                                 |   0%  |                                                                         |=======                                                          |  10%  |                                                                         |========                                                         |  12%  |                                                                         |=========                                                        |  14%  |                                                                         |=================                                                |  26%  |                                                                         |=========================                                        |  39%  |                                                                         |==============================                                   |  46%  |                                                                         |=================================                                |  51%  |                                                                         |======================================                           |  58%  |                                                                         |===========================================                      |  66%  |                                                                         |====================================================             |  80%  |                                                                         |=======================================================          |  85%  |                                                                         |================================================================ |  99%  |                                                                         |=================================================================| 100%
+##   |                                                                         |                                                                 |   0%  |                                                                         |=======                                                          |  10%  |                                                                         |==========                                                       |  15%  |                                                                         |==========                                                       |  16%  |                                                                         |==================                                               |  27%  |                                                                         |==========================                                       |  39%  |                                                                         |==================================                               |  53%  |                                                                         |=====================================                            |  57%  |                                                                         |==============================================                   |  71%  |                                                                         |======================================================           |  84%  |                                                                         |===============================================================  |  97%  |                                                                         |=================================================================| 100%
 ```
 
 ```r
@@ -89,14 +95,14 @@ str(trafi.original.hex)
 ##   ..@ h2o      :Formal class 'H2OClient' [package "h2o"] with 2 slots
 ##   .. .. ..@ ip  : chr "127.0.0.1"
 ##   .. .. ..@ port: num 54321
-##   ..@ key      : chr "data_quoted9.hex"
+##   ..@ key      : chr "data_quoted10.hex"
 ##   ..@ logic    : logi FALSE
 ##   ..@ col_names: chr  "ajoneuvoluokka" "ensirekisterointipvm" "ajoneuvoryhma" "ajoneuvonkaytto" ...
 ##   ..@ nrows    : num 2609480
 ##   ..@ ncols    : num 32
 ##   ..@ any_enum : logi TRUE
 ## 
-## H2O dataset 'data_quoted9.hex':	2609480 obs. of  32 variables:
+## H2O dataset 'data_quoted10.hex':	2609480 obs. of  32 variables:
 ## $ ajoneuvoluokka           : Factor w/ 2 levels "M1","M1G":  ...
 ## $ ensirekisterointipvm     : num   ...
 ## $ ajoneuvoryhma            : num   ...
