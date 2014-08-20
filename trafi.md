@@ -5,11 +5,13 @@
 Trafi open data analysis
 ========================
 
-This document describes the analysis of the Trafi open data. The analysis is implemented with [R](http://www.r-project.org/), and this document is created with the [knitr-packge](http://yihui.name/knitr/).
+This document describes the analysis of the Trafi open data. A related blog post can be found here [FIXME ADD]. The analysis uses the [H2O](http://0xdata.com/h2o/) platform and is implemented with [R](http://www.r-project.org/) statistical programming language. This document is created with [knitr](http://yihui.name/knitr/).
 
-The document contains a lot of technical details, so if you wish you can skip straight to the [results](#quantify-relationships-between-variables-with-linear-regression).
+We emphasize that the analysis is far from comprehensive and is designed to demonstrate the H2O platform, not to draw conclusions from the data!
 
-The data is available from [Trafi avoin data](http://www.trafi.fi/tietopalvelut/avoin_data). Data published under the [Trafi open data license](http://www.trafi.fi/tietopalvelut/avoin_data/avoimen_datan_lisenssi). 
+The document contains a lot of technical details, so if you wish you can skip straight to the results [here](#visualize-relationships-between-variables) and [here](#quantify-relationships-between-variables).
+
+The car registry data is available from [Trafi](http://www.trafi.fi/tietopalvelut/avoin_data) and is published under the [Trafi open data license](http://www.trafi.fi/tietopalvelut/avoin_data/avoimen_datan_lisenssi). 
 
 
 ## Setting up H2O
@@ -22,7 +24,8 @@ Let's first install H2O. This part needs to be run only once.
 # The latest R package is included main H2O package in http://0xdata.com/download/
 
 # You can either download and unzip it manually, or from R with the following to lines
-download.file("http://h2o-release.s3.amazonaws.com/h2o/rel-lagrange/11/h2o-2.6.0.11.zip", destfile="./h2o/h2o-2.6.0.11.zip")
+download.file("http://h2o-release.s3.amazonaws.com/h2o/rel-lagrange/11/h2o-2.6.0.11.zip",
+              destfile="./h2o/h2o-2.6.0.11.zip")
 unzip("./h2o/h2o-2.6.0.11.zip", exdir = "./h2o")
 
 # Install the R package from the source file provided
@@ -43,14 +46,22 @@ H2Olocal <- h2o.init()
 ```
 ## Successfully connected to http://127.0.0.1:54321 
 ## R is connected to H2O cluster:
-##     H2O cluster uptime:         3 hours 52 minutes 
+##     H2O cluster uptime:         39 minutes 27 seconds 
 ##     H2O cluster version:        2.6.0.11 
 ##     H2O cluster name:           H2O_started_from_R 
 ##     H2O cluster total nodes:    1 
-##     H2O cluster total memory:   0.89 GB 
+##     H2O cluster total memory:   0.95 GB 
 ##     H2O cluster total cores:    4 
 ##     H2O cluster allowed cores:  4 
 ##     H2O cluster healthy:        TRUE
+```
+
+```r
+# Load other necessary packages
+library("ggplot2")
+library("reshape2")
+library("plyr")
+theme_set(theme_grey(base_size = 24))
 ```
 
 ## Load data to H2O
@@ -79,76 +90,24 @@ but this is not feasible for big data sets. To demonstrate the H2O tools, we'll 
 ```r
 # Import data 
 trafi.original.hex <- h2o.importFile(H2Olocal, path="data_quoted.csv", parse=TRUE, header=TRUE, sep=",")
-```
 
-```
-##   |                                                                         |                                                                 |   0%  |                                                                         |=======                                                          |  10%  |                                                                         |==========                                                       |  15%  |                                                                         |==========                                                       |  16%  |                                                                         |==================                                               |  27%  |                                                                         |==========================                                       |  39%  |                                                                         |==================================                               |  53%  |                                                                         |=====================================                            |  57%  |                                                                         |==============================================                   |  71%  |                                                                         |======================================================           |  84%  |                                                                         |===============================================================  |  97%  |                                                                         |=================================================================| 100%
-```
-
-```r
 # Let's see what the imported H2OParsedData object looks like
 str(trafi.original.hex)
-```
-
-```
-## Formal class 'H2OParsedData' [package "h2o"] with 7 slots
-##   ..@ h2o      :Formal class 'H2OClient' [package "h2o"] with 2 slots
-##   .. .. ..@ ip  : chr "127.0.0.1"
-##   .. .. ..@ port: num 54321
-##   ..@ key      : chr "data_quoted10.hex"
-##   ..@ logic    : logi FALSE
-##   ..@ col_names: chr  "ajoneuvoluokka" "ensirekisterointipvm" "ajoneuvoryhma" "ajoneuvonkaytto" ...
-##   ..@ nrows    : num 2609480
-##   ..@ ncols    : num 32
-##   ..@ any_enum : logi TRUE
-## 
-## H2O dataset 'data_quoted10.hex':	2609480 obs. of  32 variables:
-## $ ajoneuvoluokka           : Factor w/ 2 levels "M1","M1G":  ...
-## $ ensirekisterointipvm     : num   ...
-## $ ajoneuvoryhma            : num   ...
-## $ ajoneuvonkaytto          : num   ...
-## $ kayttoonottopvm          : num   ...
-## $ vari                     : num   ...
-## $ ovienLukumaara           : num   ...
-## $ korityyppi               : Factor w/ 20 levels "1.7","AA",..:  ...
-## $ ohjaamotyyppi            : num   ...
-## $ istumapaikkojenLkm       : num   ...
-## $ omamassa                 : num   ...
-## $ teknSuurSallKokmassa     : num   ...
-## $ tieliikSuurSallKokmassa  : num   ...
-## $ ajonKokPituus            : num   ...
-## $ ajonLeveys               : num   ...
-## $ ajonKorkeus              : num   ...
-## $ kayttovoima              : num   ...
-## $ iskutilavuus             : num   ...
-## $ suurinNettoteho          : num   ...
-## $ sylintereidenLkm         : num   ...
-## $ ahdin                    : Factor w/ 2 levels "false","true":  ...
-## $ merkkiSelvakielinen      : Factor w/ 1245 levels "ACADIAN","ACURA",..:  ...
-## $ mallimerkinta            : num   ...
-## $ vaihteisto               : num   ...
-## $ vaihteidenLkm            : num   ...
-## $ kaupallinenNimi          : num   ...
-## $ voimanvalJaTehostamistapa: num   ...
-## $ tyyppihyvaksyntanro      : Factor w/ 20179 levels "*","***************",..:  ...
-## $ yksittaisKayttovoima     : num   ...
-## $ kunta                    : num   ...
-## $ Co2                      : num   ...
-## $ jarnro                   : num   ...
 ```
 
 Trafi also provides some annotations used in the data in a separate excel file, so let's download and read those too.
 
 
 ```r
-download.file(url = "http://www.trafi.fi/filebank/a/1402650899/782fd1d67f9f64628ae4e330c6a88b6a/14931-Koodisto.xlsx", destfile = "14931-Koodisto.xlsx")
+download.file(url = "http://www.trafi.fi/filebank/a/1402650899/782fd1d67f9f64628ae4e330c6a88b6a/14931-Koodisto.xlsx",
+              destfile = "14931-Koodisto.xlsx")
 library("gdata")
 trafi.codes <- read.xls("14931-Koodisto.xlsx")
 ```
 
-## Process data using H2O tools
+## Process data
 
-A few colums are still not parsing right (e.g. mallimerkinta, kaupallinenNimi), but will forget those for now.
+A few colums are still not parsing right (e.g. mallimerkinta, kaupallinenNimi), but we will forget those for now.
 There are in total 33 variables included. For the analysis we'll keep only a subset of them and translate their names to English.
 
 
@@ -162,11 +121,8 @@ names(trafi.hex) <- c("Registering_date", "Starting_date", "Colour", "Door_amoun
 ```
 
 Some of the variables contain numeric codes and the corresponding annotations are given in a separate file.
-However, I could not yet figure out how to replace factor values in H2O, so we will keep the numeric values for now.
-H2O contains some useful functions for processing date values, such as `h2o.year`, which we'll use next.
-
-Maybe the hardest part in using H2O instead of R is the limited set of tools available. And I have probably missed some things
-that would be doable in H2O...
+However, I could not yet figure out how to replace factor values in H2O with new ones, so we will keep the numeric values for now.
+In general the hardest part in using H2O instead of R is the limited set of tools available for processing and manipulating data. Thus also the processing phase here is very limited. H2O still contains some useful functions for processing date values, such as `h2o.year()` and `h2o.month()`.
 
 
 ```r
@@ -194,7 +150,7 @@ of data points.
 
 A good starting point to explore the data is to use the `summary()` function to get an idea of how the variables are distributed,
 how many values are missing, and whether there are some alarming extreme values. Luckily, the `summary()` works for H2O objects also,
-so we'll use that here. Indeed there seem to be some very high numerical values, so we'll set some arbitrary thresholds to filter the data.
+so we'll use that here. Indeed there seem to be some very high numerical values, so we'll set some arbitrary thresholds to filter the data. In addition, there are a few missing values (NA's), but we'll let those be for now.
 
 
 ```r
@@ -248,9 +204,8 @@ trafi.clean.hex <- trafi.hex[trafi.hex$Door_amount < 10 &
                                trafi.hex$CO2 > 0, ]
 ```
 
-For a quick analysis, we are interested in the most common car manufacturers in the data.
-We can identify those using `h2o.table()` and processing the results in R. Then we can take 
-a subset of the original data with only the most common manufacturers. 
+In our analysis, we are especially interested in the most common energy sources and car manufacturers in the data.
+We can identify those using `h2o.table()` and processing the results in R. Then we can take a subset of the original data based on these. A more detailed look at the `Manufacturer` variable reveals that it is very messy, with the same manufacturer name written in multiple ways and thus appearing as different values. A proper cleaning of the data would take a lot of time, so we'll simply keep the most common manufacturer names for this analysis.
 
 Note! In R we have very useful tools for filtering data based on factor values, such as `match()` and `%in%`. However, those are not (yet) available in H2O, so we need a trick to get the subset without repeating a lot of code.
 
@@ -260,27 +215,33 @@ Note! In R we have very useful tools for filtering data based on factor values, 
 # Note! There are a lot of messy manufacturer names, which should be cleaned.
 man.table <- as.data.frame(h2o.table(trafi.clean.hex$Manufacturer))
 man.tokeep <- as.character(man.table$row.names[man.table$Count > 10000])
-# Remove Volkswagen VW, need to fix this later
+# Remove Volkswagen VW manually, need to fix this later
 man.tokeep <- man.tokeep[man.tokeep!="Volkswagen VW"]
 
 # H2O does not support match or %in%, so we'll need a trick to take a subset based on a group of factor values
-subset.expression <- paste("trafi.clean.hex$Manufacturer == man.tokeep[",1:length(man.tokeep),"]", sep="", collapse=" | ")
+subset.expression <- paste("trafi.clean.hex$Manufacturer == man.tokeep[",1:length(man.tokeep),"]",
+                           sep="", collapse=" | ")
+trafi.clean.hex <- eval(parse(text=paste0("trafi.clean.hex[", subset.expression,",]")))
+
+# Repeat the same for the energy sources (represented by the numerical codes still)
+en.table <- as.data.frame(h2o.table(trafi.clean.hex$Energy_source))
+en.tokeep <- as.character(en.table$row.names[en.table$Count > 100])
+subset.expression <- paste("trafi.clean.hex$Energy_source == en.tokeep[",1:length(en.tokeep),"]",
+                            sep="", collapse=" | ")
 trafi.clean.hex <- eval(parse(text=paste0("trafi.clean.hex[", subset.expression,",]")))
 ```
 
-Once individual variables are somewhat ok, the exploration can turn to studying relationships between variables.
+## Visualize relationships between variables
+
+Once we are happy enough with the individual variables, the exploration can turn to studying relationships between variables.
 Here again visualizations, especially scatter plots, would be very useful. But even without being able to plot the data,
 we can do something still. Here we'll use the `cut()` and `quantile()` functions provided in H2O to group numerical values into groups.
-Then we can use `h2o.table()` to create a cross table of two such variables, pull the results to R and visualize them! As an example, we'll group the Weight variable and then study the proportion of cars in each weight group over the years.
+Then we can use `h2o.table()` to create a cross table of two such variables, pull the results to R and visualize them!
+
+As an example, we'll group the `Weight` variable into four groups and then study the proportion of cars in each weight group over the years.
 
 
 ```r
-# Load some necessary packages
-library("ggplot2")
-theme_set(theme_grey(base_size = 24))
-library("reshape2")
-library("plyr")
-
 # Study distribution of the Weight variable
 quantile(trafi.clean.hex$Weight, na.rm=TRUE)
 ```
@@ -302,25 +263,26 @@ wy.table <- h2o.table(trafi.clean.hex[c("Registering_year", "Weight.cut")])
 
 # This table we can pull into R for plotting using as.data.frame()
 wy.df <- as.data.frame(wy.table)
-names(wy.df) <- c("Registering_year", "0-1182", "118-1350", "1350-1520", "1520-")
+names(wy.df) <- c("Registering_year", "0-1182", "1182-1350", "1350-1520", "1520-")
 # Transform into a more convenient form
 wy.df <- reshape2::melt(wy.df, id.var="Registering_year")
-names(wy.df)[2] <- "WeightGroup"
+names(wy.df)[2] <- "Weight_group"
 # Compute proportion of different Weight groups per year
 wy.df <- plyr::ddply(wy.df, "Registering_year", transform, Proportion=value/sum(value))
 # Plot
-ggplot(wy.df, aes(x=Registering_year, y=WeightGroup)) + geom_tile(aes(fill=Proportion))# + theme(legend.position="bottom")# + guides(fill=guide_legend(keywidth=3))
+ggplot(wy.df, aes(x=Registering_year, y=Weight_group)) + geom_tile(aes(fill=Proportion)) + 
+  theme(legend.position="bottom") + labs(fill="Percentage of cars per year") + 
+  guides(fill=guide_legend(label.position="bottom", keywidth=2, keyheight=2))
 ```
 
 ![plot of chunk weight_vs_year](figure/weight_vs_year.png) 
 
-The visualization shows a pretty clear trend where most of the cars are very small until around 1995,
-when the distribution starts to gradually shift towards larger cars.
+The figure shows the four weight groups on the y-axis and the years from 1975 to 2014 in the x-axis. The coloured tiles show the percentage of cars in each weight group for each year. The figure reveals a pretty clear trend where most of the cars are very small until around 1995, when the distribution starts to gradually shift towards larger cars.
 
-## Quantify relationships between variables with linear regression
+## Quantify relationships between variables
 
 Next we want to do some proper quantitative analysis on the data. Specifically, we are interested in
-how the other variables affect the CO2 emissions of the cars. Here linear regression is very good first tool,
+how the other variables, such as energy source and manufacturer, affect the CO2 emissions of the cars. Here linear regression is very good first tool,
 as it gives nicely interpretable results. H2O provides the `h2o.glm()` function which can be used for linear regression.
 
 
@@ -329,15 +291,10 @@ as it gives nicely interpretable results. H2O provides the `h2o.glm()` function 
 trafi.clean.hex$Year_n <- trafi.clean.hex$Registering_year - mean(trafi.clean.hex$Registering_year, na.rm=TRUE)
 trafi.clean.hex$Weight_n <- trafi.clean.hex$Weight - mean(trafi.clean.hex$Weight, na.rm=TRUE)
 # Run linear regression
-trafi.glm <- h2o.glm(y="CO2", x=c("Year_n", "Weight_n", "Energy_source", "Compressor", "Manufacturer"), data=trafi.clean.hex,
-                     family="gaussian", alpha=0.5, variable_importances=TRUE, use_all_factor_levels=TRUE, standardize=FALSE)
-```
+trafi.glm <- h2o.glm(y="CO2", x=c("Year_n", "Weight_n", "Energy_source", "Compressor", "Manufacturer"),
+                     data=trafi.clean.hex, family="gaussian", alpha=0.5, variable_importances=TRUE, 
+                     use_all_factor_levels=TRUE, standardize=FALSE)
 
-```
-##   |                                                                         |                                                                 |   0%  |                                                                         |=================================================================| 100%
-```
-
-```r
 # Separate coefficients for manufactures, energy sources, and other factors
 coefs <- trafi.glm@model$coefficients
 coefs.manufactures <- sort(coefs[grep("Manufacturer", names(coefs))], decreasing = TRUE)
@@ -353,25 +310,35 @@ es.codes.num <- as.numeric(gsub("Energy_source.", "", names(coefs.energysource))
 names(coefs.energysource) <- as.character(energysource.codes$LYHYTSELITE[match(es.codes.num, energysource.codes$KOODINTUNNUS)])
 ```
 
-The output of the regression is tells us how each supplied factor affects the CO2 levels. The unit of CO2 is g/km. 
+Now we can study the coefficients produced by the regression model. They tell us how each supplied factor affects the CO2 levels. Let's first plot the coeffcients for the different force types. 
 
 
 ```r
 # Plot the  the effect of force types
-en.df <- data.frame(Energy_source=factor(names(coefs.energysource), levels=names(coefs.energysource)), Coefficient=coefs.energysource)
-ggplot(en.df, aes(x=Energy_source, y=Coefficient)) + geom_bar(stat="identity") + coord_flip() + ylab("CO2 coefficient (g/km)")
+en.df <- data.frame(Energy_source=factor(names(coefs.energysource), levels=names(coefs.energysource)),
+                    Coefficient=coefs.energysource)
+ggplot(en.df, aes(x=Energy_source, y=Coefficient)) + geom_bar(stat="identity") +
+  coord_flip() + ylab("CO2 coefficient (g/km)")
 ```
 
 ![plot of chunk coef_plot_energy](figure/coef_plot_energy.png) 
 
+Based on the plot it's very clear that electric and hybrid (Petrol/Electricity) cars emit the least amount of CO2, which was expected. Also CNG (compressed natural gas) and diesel cars omit less than traditional petrol fuel cars. Note that there are only some hundreds of hybrids or eletric cars in the data set, so the actual values are not very reliable. But as those become more popular, also the data becomes more accurate.
+
+Next we'll plot similarly the coeffecients for each car manufacturer. 
+
 
 ```r
 # Plot the  the effect of force types
-man.df <- data.frame(Manufacturer=factor(names(coefs.manufactures), levels=names(coefs.manufactures)), Coefficient=coefs.manufactures)
-ggplot(man.df, aes(x=Manufacturer, y=Coefficient)) + geom_bar(stat="identity") + coord_flip() + ylab("CO2 coefficient (g/km)")
+man.df <- data.frame(Manufacturer=factor(names(coefs.manufactures), levels=names(coefs.manufactures)),
+                     Coefficient=coefs.manufactures)
+ggplot(man.df, aes(x=Manufacturer, y=Coefficient)) + geom_bar(stat="identity") +
+  coord_flip() + ylab("CO2 coefficient (g/km)")
 ```
 
 ![plot of chunk coef_plot_manufacturer](figure/coef_plot_manufacturer.png) 
+
+The first thing to note is that effect sizes for the manufacturers are much smaller than those seen for the energy sources. So even though this allows the ranking of cars based on emissions, the differences are not large in practice. 
 
 Let's also check the remaining factors that were included in the regression.
 
@@ -382,12 +349,13 @@ coefs.other
 
 ```
 ## Compressor.false  Compressor.true           Year_n         Weight_n 
-##           3.2468          -3.2468          -4.6118           0.1162 
+##           3.2465          -3.2465          -4.6118           0.1162 
 ##        Intercept 
-##         142.2834
+##         140.8865
 ```
 
-So having a compressor has a very small reducing effect on the CO2 emissions. The emissions also decrease on average about 5g/km per year for new cars. Weight has a very small effect. The `Intercept` is the baseline of the CO2 level, and is indeed very close to the average CO2 value over the data.
+Having a compressor has a very small reducing effect on the CO2 emissions. The emissions increase on average for about 5 g/km per added year and for about 1 g/km per 10 kilograms of added car weight. The `Intercept` is the baseline of the CO2 level, and is indeed close to the average CO2 value over the data.
+
 
 ## Shut down H2O
 
@@ -418,7 +386,7 @@ sessionInfo()
 ## [8] base     
 ## 
 ## other attached packages:
-##  [1] plyr_1.8.1     reshape2_1.4   ggplot2_1.0.0  gdata_2.13.3  
+##  [1] gdata_2.13.3   plyr_1.8.1     reshape2_1.4   ggplot2_1.0.0 
 ##  [5] h2o_2.6.0.11   statmod_1.4.20 rjson_0.2.14   RCurl_1.95-4.3
 ##  [9] bitops_1.0-6   knitr_1.6     
 ## 
