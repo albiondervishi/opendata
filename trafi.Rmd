@@ -10,18 +10,34 @@ knit2html(input="trafi.md", output="trafi.html", options=c("use_xhtml","smartypa
 Trafi open data analysis
 ========================
 
-This document describes the analysis of the Trafi open data. A related blog post can be found here [FIXME ADD]. The analysis uses the [H2O](http://0xdata.com/h2o/) platform and is implemented with [R](http://www.r-project.org/) statistical programming language. This document is created with [knitr](http://yihui.name/knitr/).
+This document describes the analysis of the open Finnish car registry dataset from [Trafi][trafi], published under the [Trafi open data license][trafi_license]. 
+
+The analysis uses the [H2O][h2o] platform and is implemented with [R][r] statistical programming language. This document is created with [knitr][knitr], and the source code is available in [R markdown format](trafi.Rmd). A related blog post can be found [here][blogpost]. 
 
 We emphasize that the analysis is far from comprehensive and is designed to demonstrate the H2O platform, not to draw conclusions from the data!
 
-The document contains a lot of technical details, so if you wish you can skip straight to the results [here](#visualize-relationships-between-variables) and [here](#quantify-relationships-between-variables).
+[h2o]: http://0xdata.com/h2o/
+[r]: http://www.r-project.org/
+[knitr]: http://yihui.name/knitr/
+[blogpost]: http://www.avaus.fi/
+[trafi]: http://www.trafi.fi/tietopalvelut/avoin_data)
+[trafi_license]: http://www.trafi.fi/tietopalvelut/avoin_data/avoimen_datan_lisenssi
 
-The car registry data is available from [Trafi](http://www.trafi.fi/tietopalvelut/avoin_data) and is published under the [Trafi open data license](http://www.trafi.fi/tietopalvelut/avoin_data/avoimen_datan_lisenssi). 
 
+
+## H2O experiences
+
+Our experiences from H2O are highly positive. First of all, installing and setting up H2O was super easy on a laptop. Using the R package opens the H2O automatically in the background. We also experimented using H2O on an Amazon cloud cluster, and it worked fine. 
+
+Big data tools, such as H2O, set restrictions in all common data analysis steps such as loading, preprocessing, exploring, filtering, visualizing and modelling the data. The first problem occurred when the data was loaded and multiple columns appeared to have no data. After a bit of googling and wondering we found out that if a categorial data column includes even one numeric value, all the categorial values will disappear. Adding quotes to the csv file helped for some columns but not all. H2O is under very active development, so let’s hope this will improve in the future. There were also many difficulties in manipulating data with H2O, some of which could be worked around in somewhat ugly ways, while some remained unsolved.
+
+All in all, H2O seems very promising. It fast very fast and the documentation was as good as can be expected from a project still in the development phase. The developers also did good job at responding questions in the associated [Google Group][h2ogg]. We’ll definitely keep exploring H2O in the future!
+
+[h2ogg]: https://groups.google.com/forum/#!forum/h2ostream
 
 ## Setting up H2O
 
-Let's first install H2O. This part needs to be run only once.
+Let's first install H2O.
 
 ```{r h2o_install, eval=FALSE}
 # The H2O R package in CRAN is not necessarily up to date

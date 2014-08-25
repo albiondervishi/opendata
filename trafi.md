@@ -5,18 +5,34 @@
 Trafi open data analysis
 ========================
 
-This document describes the analysis of the Trafi open data. A related blog post can be found here [FIXME ADD]. The analysis uses the [H2O](http://0xdata.com/h2o/) platform and is implemented with [R](http://www.r-project.org/) statistical programming language. This document is created with [knitr](http://yihui.name/knitr/).
+This document describes the analysis of the open Finnish car registry dataset from [Trafi][trafi], published under the [Trafi open data license][trafi_license]. 
+
+The analysis uses the [H2O][h2o] platform and is implemented with [R][r] statistical programming language. This document is created with [knitr][knitr], and the source code is available in [R markdown format](trafi.Rmd). A related blog post can be found [here][blogpost]. 
 
 We emphasize that the analysis is far from comprehensive and is designed to demonstrate the H2O platform, not to draw conclusions from the data!
 
-The document contains a lot of technical details, so if you wish you can skip straight to the results [here](#visualize-relationships-between-variables) and [here](#quantify-relationships-between-variables).
+[h2o]: http://0xdata.com/h2o/
+[r]: http://www.r-project.org/
+[knitr]: http://yihui.name/knitr/
+[blogpost]: http://www.avaus.fi/
+[trafi]: http://www.trafi.fi/tietopalvelut/avoin_data)
+[trafi_license]: http://www.trafi.fi/tietopalvelut/avoin_data/avoimen_datan_lisenssi
 
-The car registry data is available from [Trafi](http://www.trafi.fi/tietopalvelut/avoin_data) and is published under the [Trafi open data license](http://www.trafi.fi/tietopalvelut/avoin_data/avoimen_datan_lisenssi). 
 
+
+## H2O experiences
+
+Our experiences from H2O are highly positive. First of all, installing and setting up H2O was super easy on a laptop. Using the R package opens the H2O automatically in the background. We also experimented using H2O on an Amazon cloud cluster, and it worked fine. 
+
+Big data tools, such as H2O, set restrictions in all common data analysis steps such as loading, preprocessing, exploring, filtering, visualizing and modelling the data. The first problem occurred when the data was loaded and multiple columns appeared to have no data. After a bit of googling and wondering we found out that if a categorial data column includes even one numeric value, all the categorial values will disappear. Adding quotes to the csv file helped for some columns but not all. H2O is under very active development, so let’s hope this will improve in the future. There were also many difficulties in manipulating data with H2O, some of which could be worked around in somewhat ugly ways, while some remained unsolved.
+
+All in all, H2O seems very promising. It fast very fast and the documentation was as good as can be expected from a project still in the development phase. The developers also did good job at responding questions in the associated [Google Group][h2ogg]. We’ll definitely keep exploring H2O in the future!
+
+[h2ogg]: https://groups.google.com/forum/#!forum/h2ostream
 
 ## Setting up H2O
 
-Let's first install H2O. This part needs to be run only once.
+Let's first install H2O.
 
 
 ```r
@@ -39,18 +55,63 @@ Then load the R packge and start H2O in the background, which takes a bit of tim
 ```r
 # Load library
 library("h2o")
+```
+
+```
+## Loading required package: RCurl
+## Loading required package: bitops
+## Loading required package: rjson
+## Loading required package: statmod
+## Loading required package: tools
+## 
+## ----------------------------------------------------------------------
+## 
+## Your next step is to start H2O and get a connection object (named
+## 'localH2O', for example):
+##     > localH2O = h2o.init()
+## 
+## For H2O package documentation, first call init() and then ask for help:
+##     > localH2O = h2o.init()
+##     > ??h2o
+## 
+## To stop H2O you must explicitly call shutdown (either from R, as shown
+## here, or from the Web UI):
+##     > h2o.shutdown(localH2O)
+## 
+## After starting H2O, you can use the Web UI at http://localhost:54321
+## For more information visit http://docs.0xdata.com
+## 
+## ----------------------------------------------------------------------
+## 
+## 
+## Attaching package: 'h2o'
+## 
+## The following objects are masked from 'package:base':
+## 
+##     ifelse, max, min, sum
+```
+
+```r
 # Initialize h2o (by default, this will start H2O) 
 H2Olocal <- h2o.init()
 ```
 
 ```
+## 
+## H2O is not running yet, starting it now...
+## 
+## Note:  In case of errors look at the following log files:
+##            /tmp/h2o_juuso_parkkinen_started_from_r.out
+##            /tmp/h2o_juuso_parkkinen_started_from_r.err
+## 
+## 
 ## Successfully connected to http://127.0.0.1:54321 
 ## R is connected to H2O cluster:
-##     H2O cluster uptime:         39 minutes 27 seconds 
+##     H2O cluster uptime:         29 seconds 197 milliseconds 
 ##     H2O cluster version:        2.6.0.11 
 ##     H2O cluster name:           H2O_started_from_R 
 ##     H2O cluster total nodes:    1 
-##     H2O cluster total memory:   0.95 GB 
+##     H2O cluster total memory:   0.96 GB 
 ##     H2O cluster total cores:    4 
 ##     H2O cluster allowed cores:  4 
 ##     H2O cluster healthy:        TRUE
@@ -61,6 +122,18 @@ H2Olocal <- h2o.init()
 library("ggplot2")
 library("reshape2")
 library("plyr")
+```
+
+```
+## 
+## Attaching package: 'plyr'
+## 
+## The following objects are masked from 'package:h2o':
+## 
+##     ., ddply
+```
+
+```r
 theme_set(theme_grey(base_size = 24))
 ```
 
@@ -393,7 +466,7 @@ sessionInfo()
 ## loaded via a namespace (and not attached):
 ##  [1] colorspace_1.2-4 digest_0.6.4     evaluate_0.5.5   formatR_0.10    
 ##  [5] grid_3.1.1       gtable_0.1.2     gtools_3.4.1     labeling_0.2    
-##  [9] markdown_0.7.2   MASS_7.3-33      munsell_0.4.2    proto_0.3-10    
-## [13] Rcpp_0.11.2      scales_0.2.4     stringr_0.6.2
+##  [9] MASS_7.3-33      munsell_0.4.2    proto_0.3-10     Rcpp_0.11.2     
+## [13] scales_0.2.4     stringr_0.6.2
 ```
 
