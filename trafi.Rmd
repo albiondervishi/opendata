@@ -230,7 +230,8 @@ names(wy.df)[2] <- "Weight_group"
 wy.df <- plyr::ddply(wy.df, "Registering_year", transform, Proportion=value/sum(value))
 # Plot
 ggplot(wy.df, aes(x=Registering_year, y=Weight_group)) + geom_tile(aes(fill=Proportion)) + 
-  theme(legend.position="bottom") + labs(fill="Percentage of cars per year") + 
+  theme(legend.position="bottom") +
+  labs(x="Registering year", y="Weight (kg)", fill="Percentage of cars per year") + 
   guides(fill=guide_legend(label.position="bottom", keywidth=2, keyheight=2))
 ```
 
@@ -272,8 +273,8 @@ Now we can study the coefficients produced by the regression model. They tell us
 # Plot the  the effect of force types
 en.df <- data.frame(Energy_source=factor(names(coefs.energysource), levels=names(coefs.energysource)),
                     Coefficient=coefs.energysource)
-ggplot(en.df, aes(x=Energy_source, y=Coefficient)) + geom_bar(stat="identity") +
-  coord_flip() + ylab("CO2 coefficient (g/km)")
+ggplot(en.df, aes(x=Energy_source, y=Coefficient)) + geom_bar(stat="identity") + coord_flip() + 
+  labs(y="CO2 coefficient (g/km)", x="Energy source")
 ```
 
 Based on the plot it's very clear that electric and hybrid (Petrol/Electricity) cars emit the least amount of CO2, which was expected. Also CNG (compressed natural gas) and diesel cars omit less than traditional petrol fuel cars. Note that there are only some hundreds of hybrids or eletric cars in the data set, so the actual values are not very reliable. But as those become more popular, also the data becomes more accurate.
@@ -284,8 +285,8 @@ Next we'll plot similarly the coeffecients for each car manufacturer.
 # Plot the  the effect of force types
 man.df <- data.frame(Manufacturer=factor(names(coefs.manufactures), levels=names(coefs.manufactures)),
                      Coefficient=coefs.manufactures)
-ggplot(man.df, aes(x=Manufacturer, y=Coefficient)) + geom_bar(stat="identity") +
-  coord_flip() + ylab("CO2 coefficient (g/km)")
+ggplot(man.df, aes(x=Manufacturer, y=Coefficient)) + geom_bar(stat="identity") + coord_flip() + 
+  labs(y="CO2 coefficient (g/km)", x="Energy source")
 ```
 
 The first thing to note is that effect sizes for the manufacturers are much smaller than those seen for the energy sources. So even though this allows the ranking of cars based on emissions, the differences are not large in practice. 

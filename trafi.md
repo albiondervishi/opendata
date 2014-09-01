@@ -107,7 +107,7 @@ H2Olocal <- h2o.init()
 ## 
 ## Successfully connected to http://127.0.0.1:54321 
 ## R is connected to H2O cluster:
-##     H2O cluster uptime:         29 seconds 197 milliseconds 
+##     H2O cluster uptime:         2 minutes 12 seconds 
 ##     H2O cluster version:        2.6.0.11 
 ##     H2O cluster name:           H2O_started_from_R 
 ##     H2O cluster total nodes:    1 
@@ -344,7 +344,8 @@ names(wy.df)[2] <- "Weight_group"
 wy.df <- plyr::ddply(wy.df, "Registering_year", transform, Proportion=value/sum(value))
 # Plot
 ggplot(wy.df, aes(x=Registering_year, y=Weight_group)) + geom_tile(aes(fill=Proportion)) + 
-  theme(legend.position="bottom") + labs(fill="Percentage of cars per year") + 
+  theme(legend.position="bottom") +
+  labs(x="Registering year", y="Weight (kg)", fill="Percentage of cars per year") + 
   guides(fill=guide_legend(label.position="bottom", keywidth=2, keyheight=2))
 ```
 
@@ -390,8 +391,8 @@ Now we can study the coefficients produced by the regression model. They tell us
 # Plot the  the effect of force types
 en.df <- data.frame(Energy_source=factor(names(coefs.energysource), levels=names(coefs.energysource)),
                     Coefficient=coefs.energysource)
-ggplot(en.df, aes(x=Energy_source, y=Coefficient)) + geom_bar(stat="identity") +
-  coord_flip() + ylab("CO2 coefficient (g/km)")
+ggplot(en.df, aes(x=Energy_source, y=Coefficient)) + geom_bar(stat="identity") + coord_flip() + 
+  labs(y="CO2 coefficient (g/km)", x="Energy source")
 ```
 
 ![plot of chunk coef_plot_energy](figure/coef_plot_energy.png) 
@@ -405,8 +406,8 @@ Next we'll plot similarly the coeffecients for each car manufacturer.
 # Plot the  the effect of force types
 man.df <- data.frame(Manufacturer=factor(names(coefs.manufactures), levels=names(coefs.manufactures)),
                      Coefficient=coefs.manufactures)
-ggplot(man.df, aes(x=Manufacturer, y=Coefficient)) + geom_bar(stat="identity") +
-  coord_flip() + ylab("CO2 coefficient (g/km)")
+ggplot(man.df, aes(x=Manufacturer, y=Coefficient)) + geom_bar(stat="identity") + coord_flip() + 
+  labs(y="CO2 coefficient (g/km)", x="Energy source")
 ```
 
 ![plot of chunk coef_plot_manufacturer](figure/coef_plot_manufacturer.png) 

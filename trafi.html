@@ -273,7 +273,7 @@ H2Olocal &lt;- h2o.init()
 ## 
 ## Successfully connected to http://127.0.0.1:54321 
 ## R is connected to H2O cluster:
-##     H2O cluster uptime:         29 seconds 197 milliseconds 
+##     H2O cluster uptime:         2 minutes 12 seconds 
 ##     H2O cluster version:        2.6.0.11 
 ##     H2O cluster name:           H2O_started_from_R 
 ##     H2O cluster total nodes:    1 
@@ -489,7 +489,8 @@ names(wy.df)[2] &lt;- &quot;Weight_group&quot;
 wy.df &lt;- plyr::ddply(wy.df, &quot;Registering_year&quot;, transform, Proportion=value/sum(value))
 # Plot
 ggplot(wy.df, aes(x=Registering_year, y=Weight_group)) + geom_tile(aes(fill=Proportion)) + 
-  theme(legend.position=&quot;bottom&quot;) + labs(fill=&quot;Percentage of cars per year&quot;) + 
+  theme(legend.position=&quot;bottom&quot;) +
+  labs(x=&quot;Registering year&quot;, y=&quot;Weight (kg)&quot;, fill=&quot;Percentage of cars per year&quot;) + 
   guides(fill=guide_legend(label.position=&quot;bottom&quot;, keywidth=2, keyheight=2))
 </code></pre>
 
@@ -531,8 +532,8 @@ names(coefs.energysource) &lt;- as.character(energysource.codes$LYHYTSELITE[matc
 <pre><code class="r"># Plot the  the effect of force types
 en.df &lt;- data.frame(Energy_source=factor(names(coefs.energysource), levels=names(coefs.energysource)),
                     Coefficient=coefs.energysource)
-ggplot(en.df, aes(x=Energy_source, y=Coefficient)) + geom_bar(stat=&quot;identity&quot;) +
-  coord_flip() + ylab(&quot;CO2 coefficient (g/km)&quot;)
+ggplot(en.df, aes(x=Energy_source, y=Coefficient)) + geom_bar(stat=&quot;identity&quot;) + coord_flip() + 
+  labs(y=&quot;CO2 coefficient (g/km)&quot;, x=&quot;Energy source&quot;)
 </code></pre>
 
 <p><img src="figure/coef_plot_energy.png" alt="plot of chunk coef_plot_energy"/> </p>
@@ -544,8 +545,8 @@ ggplot(en.df, aes(x=Energy_source, y=Coefficient)) + geom_bar(stat=&quot;identit
 <pre><code class="r"># Plot the  the effect of force types
 man.df &lt;- data.frame(Manufacturer=factor(names(coefs.manufactures), levels=names(coefs.manufactures)),
                      Coefficient=coefs.manufactures)
-ggplot(man.df, aes(x=Manufacturer, y=Coefficient)) + geom_bar(stat=&quot;identity&quot;) +
-  coord_flip() + ylab(&quot;CO2 coefficient (g/km)&quot;)
+ggplot(man.df, aes(x=Manufacturer, y=Coefficient)) + geom_bar(stat=&quot;identity&quot;) + coord_flip() + 
+  labs(y=&quot;CO2 coefficient (g/km)&quot;, x=&quot;Energy source&quot;)
 </code></pre>
 
 <p><img src="figure/coef_plot_manufacturer.png" alt="plot of chunk coef_plot_manufacturer"/> </p>
