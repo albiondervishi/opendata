@@ -286,7 +286,7 @@ Next we'll plot similarly the coeffecients for each car manufacturer.
 man.df <- data.frame(Manufacturer=factor(names(coefs.manufactures), levels=names(coefs.manufactures)),
                      Coefficient=coefs.manufactures)
 ggplot(man.df, aes(x=Manufacturer, y=Coefficient)) + geom_bar(stat="identity") + coord_flip() + 
-  labs(y="CO2 coefficient (g/km)", x="Energy source")
+  labs(y="CO2 coefficient (g/km)")
 ```
 
 The first thing to note is that effect sizes for the manufacturers are much smaller than those seen for the energy sources. So even though this allows the ranking of cars based on emissions, the differences are not large in practice. 

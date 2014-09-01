@@ -273,7 +273,7 @@ H2Olocal &lt;- h2o.init()
 ## 
 ## Successfully connected to http://127.0.0.1:54321 
 ## R is connected to H2O cluster:
-##     H2O cluster uptime:         2 minutes 12 seconds 
+##     H2O cluster uptime:         48 seconds 307 milliseconds 
 ##     H2O cluster version:        2.6.0.11 
 ##     H2O cluster name:           H2O_started_from_R 
 ##     H2O cluster total nodes:    1 
@@ -546,7 +546,7 @@ ggplot(en.df, aes(x=Energy_source, y=Coefficient)) + geom_bar(stat=&quot;identit
 man.df &lt;- data.frame(Manufacturer=factor(names(coefs.manufactures), levels=names(coefs.manufactures)),
                      Coefficient=coefs.manufactures)
 ggplot(man.df, aes(x=Manufacturer, y=Coefficient)) + geom_bar(stat=&quot;identity&quot;) + coord_flip() + 
-  labs(y=&quot;CO2 coefficient (g/km)&quot;, x=&quot;Energy source&quot;)
+  labs(y=&quot;CO2 coefficient (g/km)&quot;)
 </code></pre>
 
 <p><img src="figure/coef_plot_manufacturer.png" alt="plot of chunk coef_plot_manufacturer"/> </p>

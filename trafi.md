@@ -107,7 +107,7 @@ H2Olocal <- h2o.init()
 ## 
 ## Successfully connected to http://127.0.0.1:54321 
 ## R is connected to H2O cluster:
-##     H2O cluster uptime:         2 minutes 12 seconds 
+##     H2O cluster uptime:         48 seconds 307 milliseconds 
 ##     H2O cluster version:        2.6.0.11 
 ##     H2O cluster name:           H2O_started_from_R 
 ##     H2O cluster total nodes:    1 
@@ -407,7 +407,7 @@ Next we'll plot similarly the coeffecients for each car manufacturer.
 man.df <- data.frame(Manufacturer=factor(names(coefs.manufactures), levels=names(coefs.manufactures)),
                      Coefficient=coefs.manufactures)
 ggplot(man.df, aes(x=Manufacturer, y=Coefficient)) + geom_bar(stat="identity") + coord_flip() + 
-  labs(y="CO2 coefficient (g/km)", x="Energy source")
+  labs(y="CO2 coefficient (g/km)")
 ```
 
 ![plot of chunk coef_plot_manufacturer](figure/coef_plot_manufacturer.png) 
