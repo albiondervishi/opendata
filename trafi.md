@@ -15,7 +15,7 @@ We emphasize that the analysis is far from comprehensive and is designed to demo
 [r]: http://www.r-project.org/
 [knitr]: http://yihui.name/knitr/
 [blogpost]: http://www.avaus.fi/business/using-h2o-big-data-platform-to-analyze-co2-emissions-of-cars
-[trafi]: http://www.trafi.fi/tietopalvelut/avoin_data)
+[trafi]: http://www.trafi.fi/tietopalvelut/avoin_data
 [trafi_license]: http://www.trafi.fi/tietopalvelut/avoin_data/avoimen_datan_lisenssi
 
 
