@@ -56,7 +56,6 @@ shinyUI(fluidPage(
                  #                 plotOutput("coefs_ggplot", height="400px", width="80%"),
                  h3("Regression results"),
                  h4("Predictive performance"),
-                 p("ADD RMSE values!"),
                  plotOutput("pred_ggplot", height="400px", width="800px"),
                  
                  h4("Regression coefficients for numerical variables"),

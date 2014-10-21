@@ -72,7 +72,7 @@ shinyServer(function (input, output) {
   })
 
   output$pred_ggplot <- renderPlot({
-    # Plotting prediction results
+    message("Plotting prediction results")
     pred.fits <- get_prediction_results()
     train.res.df <- data.frame(Co2.true = trafi.train.df$Co2, Co2.pred = as.data.frame(pred.fits$train)$predict)
     test.res.df <- data.frame(Co2.true = trafi.test.df$Co2, Co2.pred = as.data.frame(pred.fits$test)$predict)
@@ -85,11 +85,11 @@ shinyServer(function (input, output) {
     p.train <- ggplot(train.res.df, aes(x=Co2.true, y=Co2.pred)) + geom_point(alpha=0.5) + 
       ggtitle(paste("Training data, RMSE:", round(train.rmse, d=1))) + 
       labs(x="True Co2", y="Predicted Co2") + 
-      xlim(xlims[1], xlims[2]) + ylim(ylims[1], ylims[2]) + abline(a=0, b=1)
+      xlim(xlims[1], xlims[2]) + ylim(ylims[1], ylims[2]) + geom_abline(slope=1)
     p.test <- ggplot(test.res.df, aes(x=Co2.true, y=Co2.pred)) + geom_point(alpha=0.5) + 
       ggtitle(paste("Test data, RMSE:", round(test.rmse, d=1))) + 
       labs(x="True Co2", y="Predicted Co2") + 
-      xlim(xlims[1], xlims[2]) + ylim(ylims[1], ylims[2]) + abline(a=0, b=1)
+      xlim(xlims[1], xlims[2]) + ylim(ylims[1], ylims[2]) + geom_abline(slope=1)
     print(arrangeGrob(p.train, p.test, nrow=1))
   })
 
