@@ -1,8 +1,9 @@
 .Rproj.user
 .Rhistory
-.RData
-h2o
+*.RData
+h2o*
 .DS_Store
 
 *.csv
 *.xlsx
+*.zip
