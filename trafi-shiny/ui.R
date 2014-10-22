@@ -1,6 +1,6 @@
 shinyUI(fluidPage(
   
-  # Include googel analytics script (updated 8.10.2014)
+  # Include googel analytics script
   #   tags$head(includeScript("google-analytics.js")),
   
   # Application title
@@ -18,37 +18,29 @@ shinyUI(fluidPage(
       ),
       p("Here you can explore and visualize open car registry data by Trafi"),
       p(a("Data source", href="http://www.trafi.fi/tietopalvelut/avoin_data")),
-      p("Note that loading the data takes a few seconds")
-      
-      #      selectInput("plotType", "Visualisointitapa", c("Motion chart" = "motionchart", "Kartta" = "map")),
-      #       conditionalPanel(
-      #         condition = "input.plotType == 'motionchart'",
-      #         helpText(h4("Motion chartin asetukset:")),
-      #         
-      #         radioButtons("region.category", "Aluekategoria",
-      #                      c("Kunta" = "kunta",
-      #                        "Maakunta" = "maakunta",
-      #                        "Seutukunta" = "seutukunta")),
-      # br()
-      #       p("Made by", a("@ouzor", href="https://twitter.com/ouzor")),
-      #       helpText(a("Datalähde: Sotkanet", href="http://www.sotkanet.fi", target="_blank")),
-      #       helpText(a("Lähdekoodi GitHubissa", href="https://github.com/ouzor/sotkanet-shiny", target="_blank"))
+#      p("Note that loading the data takes a few seconds!")
+      h4("TODO"),
+      p("- RMSE strangely similar between training and test data - double check code!"),
+      p("- Include more variables to the data and prediction"),
+      p("- Regression stuff takes a long time now, should be faster. Maybe remove training data prediction computation and plot, should make it faster.")
     ),
     
     mainPanel(
       tabsetPanel(
         tabPanel("Data overview",
                  h4("Here's a sample of the data"),
+                 p("In total the data has about 1.5 million rows"),
                  htmlOutput("gvistable")
         ),
         tabPanel("Prediction",
                  h3("Predict CO2 emissions of cars"),
+#                 radioButtons("include.electric", "Include electric cars?", c("Yes"=TRUE, "No"=FALSE), selected="Yes"),
                  checkboxGroupInput("variables","Select variables to use for prediction",
                                     choices=c("Weight"="Weight",
                                               "CarAge" = "CarAge",
                                               "Colour"="Colour",
                                               "EnergySource"="EnergySource",
-                                              "Manufacturer"="Manufacturer",
+                                              "Brand"="Brand",
                                               "Location"="Location"),
                                     selected=c("Weight", "CarAge", "Colour")
                  ),
@@ -56,6 +48,7 @@ shinyUI(fluidPage(
                  #                 plotOutput("coefs_ggplot", height="400px", width="80%"),
                  h3("Regression results"),
                  h4("Predictive performance"),
+                 sliderInput("plot.size", "Set amount of data to plot (bigger takes longer!)", min=0.05, max=0.5, value=0.05),
                  plotOutput("pred_ggplot", height="400px", width="800px"),
                  
                  h4("Regression coefficients for numerical variables"),

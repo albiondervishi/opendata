@@ -5,19 +5,21 @@ library(ggplot2)
 theme_set(theme_grey(20))
 library(gridExtra)
 
-# Init h2o
-H2Olocal <- h2o.init()
+message("Remember to run setup.R first to setup H2O!")
 
-# Load data and setup with h2o
-# load("Trafi_subset1.RData")
-# trafi.subset.df <- head(trafi.subset.df, 100000)
-# trafi.h2o <- as.h2o(H2Olocal, trafi.subset.df)
-
-
-# Split to training and test set
-load("Trafi_subset1_train+test.RData")
-trafi.train.h2o <- as.h2o(H2Olocal, trafi.train.df)
-trafi.test.h2o <- as.h2o(H2Olocal, trafi.test.df)
+# # Init h2o
+# H2Olocal <- h2o.init()
+# 
+# # Load data and setup with h2o
+# # load("Trafi_subset1.RData")
+# # trafi.subset.df <- head(trafi.subset.df, 100000)
+# # trafi.h2o <- as.h2o(H2Olocal, trafi.subset.df)
+# 
+# 
+# # Split to training and test set
+# load("Trafi_subset1_train+test.RData")
+# trafi.train.h2o <- as.h2o(H2Olocal, trafi.train.df)
+# trafi.test.h2o <- as.h2o(H2Olocal, trafi.test.df)
 
 
 shinyServer(function (input, output) {
@@ -30,10 +32,9 @@ shinyServer(function (input, output) {
   })
   
   
-  ## REGRESSION ######
-  
+  ## REGRESSION ######  
   glm_res <- reactive({
-    message("Running regression with", input$variables)
+    message("Running regression with ", paste(input$variables, collapse=" "))
     # Run regression
     glm.res <- h2o.glm(y="Co2", x=input$variables, data=trafi.train.h2o, family="gaussian", alpha=0.5,
                          variable_importances=TRUE, use_all_factor_levels=TRUE, standardize=FALSE)
@@ -45,7 +46,7 @@ shinyServer(function (input, output) {
     glm.res <- glm_res()
     coefs.all <- glm.res@model$coefficients
     # Process categorical variables
-    cat.vars <- intersect(input$variables, c("Colour", "EnergySource", "Manufacturer", "Location"))
+    cat.vars <- intersect(input$variables, c("Colour", "EnergySource", "Brand", "Location"))
 #     if (length(cat.vars)==0)
 #       return(NULL) # stop("Choose at least one categorical variable")
     names(cat.vars) <- cat.vars
@@ -73,20 +74,23 @@ shinyServer(function (input, output) {
 
   output$pred_ggplot <- renderPlot({
     message("Plotting prediction results")
+    # NOTE! That for really big data we would need to take a subset of the h2o object first pull that to R for visualization
     pred.fits <- get_prediction_results()
-    train.res.df <- data.frame(Co2.true = trafi.train.df$Co2, Co2.pred = as.data.frame(pred.fits$train)$predict)
-    test.res.df <- data.frame(Co2.true = trafi.test.df$Co2, Co2.pred = as.data.frame(pred.fits$test)$predict)
+    train.inds <- sample(nrow(trafi.train.df), floor(input$plot.size*nrow(trafi.train.df)))
+    test.inds <- sample(nrow(trafi.test.df), floor(input$plot.size*nrow(trafi.test.df)))
+    train.res.df <- data.frame(Co2.true = trafi.train.df$Co2[train.inds], Co2.pred = as.data.frame(pred.fits$train)$predict[train.inds])
+    test.res.df <- data.frame(Co2.true = trafi.test.df$Co2[test.inds], Co2.pred = as.data.frame(pred.fits$test)$predict[test.inds])
     train.rmse <- sqrt( sum( (train.res.df$Co2.true - train.res.df$Co2.pred)^2 , na.rm = TRUE ) / nrow(train.res.df) )
     test.rmse <- sqrt( sum( (test.res.df$Co2.true - test.res.df$Co2.pred)^2 , na.rm = TRUE ) / nrow(test.res.df) )
     
     xlims <- c(min(train.res.df$Co2.true, test.res.df$Co2.true), max(train.res.df$Co2.true, test.res.df$Co2.true))
     ylims <- c(min(train.res.df$Co2.pred, test.res.df$Co2.pred), max(train.res.df$Co2.pred, test.res.df$Co2.pred))
     
-    p.train <- ggplot(train.res.df, aes(x=Co2.true, y=Co2.pred)) + geom_point(alpha=0.5) + 
+    p.train <- ggplot(train.res.df, aes(x=Co2.true, y=Co2.pred)) + geom_point(alpha=0.2) + 
       ggtitle(paste("Training data, RMSE:", round(train.rmse, d=1))) + 
       labs(x="True Co2", y="Predicted Co2") + 
       xlim(xlims[1], xlims[2]) + ylim(ylims[1], ylims[2]) + geom_abline(slope=1)
-    p.test <- ggplot(test.res.df, aes(x=Co2.true, y=Co2.pred)) + geom_point(alpha=0.5) + 
+    p.test <- ggplot(test.res.df, aes(x=Co2.true, y=Co2.pred)) + geom_point(alpha=0.2) + 
       ggtitle(paste("Test data, RMSE:", round(test.rmse, d=1))) + 
       labs(x="True Co2", y="Predicted Co2") + 
       xlim(xlims[1], xlims[2]) + ylim(ylims[1], ylims[2]) + geom_abline(slope=1)
@@ -100,7 +104,7 @@ shinyServer(function (input, output) {
     coefs.others <- coefs$others
 #     if (length(coefs.others)==0)
 #       return(NULL)
-    df <- data.frame(Variable=names(coefs.others), Coefficient=coefs.others)
+    df <- data.frame(Variable=names(coefs.others), Coefficient=round(coefs.others, d=2))
     coefs.table <- gvisTable(df, options=list(width='300px'))
     return(coefs.table)
   })
@@ -117,6 +121,7 @@ shinyServer(function (input, output) {
     }
     # Compute length of results
     res.len <- sapply(coefs.dfs, nrow)
+    res.len[res.len < 10] <- 10
     p.coefs <- do.call(arrangeGrob, c(plots, list(ncol=1, heights=res.len/sum(res.len))))
     print(p.coefs)
  })
