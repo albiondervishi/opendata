@@ -69,25 +69,25 @@ save(trafi.subset.df, file="trafi-shiny/Trafi_subset1.RData")
 
 
 
-## TEST PREDICTION #######
-
-load("trafi-shiny/Trafi_subset1.RData")
-
-
-
-input <- list(variables=c("Weight", "Brand"))
-# pred.formula <- as.formula(paste("Co2 ~ ", paste(input$variables, collapse=" + ")))
-# res <- lm(formula=pred.formula, family="gaussian", data=trafi.subset.df)
-
-# With h2o
-install.packages("h2o-2.8.0.1/R/h2o_2.8.0.1.tar.gz")
-library("h2o")
-H2Olocal <- h2o.init()
-trafi.h2o <- as.h2o(H2Olocal, trafi.subset.df)
-trafi.glm <- h2o.glm(y="Co2", x=input$variables, data=trafi.h2o, family="gaussian", alpha=0.5,
-                     variable_importances=TRUE, use_all_factor_levels=TRUE, standardize=FALSE)
-# coefs <- trafi.glm@model$coefficients
-# coefs.manufactures <- sort(coefs[grep("Brand", names(coefs))], decreasing = TRUE)
+# ## TEST PREDICTION #######
+# 
+# load("trafi-shiny/Trafi_subset1.RData")
+# 
+# 
+# 
+# input <- list(variables=c("Weight", "Brand"))
+# # pred.formula <- as.formula(paste("Co2 ~ ", paste(input$variables, collapse=" + ")))
+# # res <- lm(formula=pred.formula, family="gaussian", data=trafi.subset.df)
+# 
+# # With h2o
+# install.packages("h2o-2.8.0.1/R/h2o_2.8.0.1.tar.gz")
+# library("h2o")
+# H2Olocal <- h2o.init()
+# trafi.h2o <- as.h2o(H2Olocal, trafi.subset.df)
+# trafi.glm <- h2o.glm(y="Co2", x=input$variables, data=trafi.h2o, family="gaussian", alpha=0.5,
+#                      variable_importances=TRUE, use_all_factor_levels=TRUE, standardize=FALSE)
+# # coefs <- trafi.glm@model$coefficients
+# # coefs.manufactures <- sort(coefs[grep("Brand", names(coefs))], decreasing = TRUE)
 
 
 

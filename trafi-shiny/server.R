@@ -1,9 +1,9 @@
 library("h2o")
-library(googleVis)
-library(reshape2)
-library(ggplot2)
+library("googleVis")
+library("reshape2")
+library("ggplot2")
 theme_set(theme_grey(20))
-library(gridExtra)
+library("gridExtra")
 
 message("Remember to run setup.R first to setup H2O!")
 
