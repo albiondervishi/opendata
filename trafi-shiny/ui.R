@@ -22,7 +22,8 @@ shinyUI(fluidPage(
       h4("TODO"),
       p("- RMSE strangely similar between training and test data - double check code!"),
       p("- Include more variables to the data and prediction"),
-      p("- Regression stuff takes a long time now, should be faster. Maybe remove training data prediction computation and plot, should make it faster.")
+      p("- Regression stuff takes a long time now, should be faster. Maybe remove training data prediction computation and plot, should make it faster."),
+      p("- Now we filter with ajoneuvoluokka==M1, but that may still include things like asuntovaunu, which does not make sense. So we should check the korityyppi included in M1 and filter more based on that. It should make the regression more sensible and better.")
     ),
     
     mainPanel(
